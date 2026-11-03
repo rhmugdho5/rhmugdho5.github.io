@@ -1,58 +1,37 @@
 # Rejoan Hasan Mugdho — Personal Portfolio
 
-A responsive, cybersecurity-inspired personal portfolio built with HTML, CSS and vanilla JavaScript. Designed for GitHub Pages.
-
-## Project structure
-
-```text
-rejoan-portfolio/
-├── index.html
-├── styles.css
-├── script.js
-├── config.js
-├── README.md
-└── assets/
-    └── Rejoan_Hasan_Mugdho_CV.pdf
-```
-
-## Before publishing
-
-1. Open `config.js`.
-2. Replace `YOUR_GITHUB_USERNAME` with your GitHub username (the handle only).
-3. Add your preferred public contact email to `contactEmail`.
-4. Optionally set `githubProfileUrl` if you use a different profile URL.
-5. Replace the starter CV PDF in `assets/` with your final, up-to-date CV.
-6. Review project descriptions, certificates and links. Add repository URLs to the project modal data in `script.js` if you want direct project links.
-7. Update the education and achievement details if anything has changed.
-
-The GitHub section reads public repositories from GitHub's public REST API. It does not require a personal access token. GitHub API rate limits may apply.
-
-The contact form uses a `mailto:` link. It opens the visitor's email application; it does not send messages to a server. For a true website-hosted form, connect a form provider (for example Formspree) and replace the submit handler in `script.js`.
+A responsive, single-page portfolio built with plain HTML, CSS, and vanilla JavaScript. Designed to deploy directly to GitHub Pages: no package manager, build command, or framework is required.
 
 ## Preview locally
 
-Open `index.html` in a browser. For a local development server, run this command from the project folder:
+Open `index.html` in a browser, or run a simple local server from this folder:
 
 ```bash
-python3 -m http.server 8000
+python -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Then visit <http://localhost:8000>.
 
-## Deploy to GitHub Pages
+## Deploy with GitHub Pages
 
-1. Create a public GitHub repository named `YOUR_GITHUB_USERNAME.github.io`.
-2. Upload the contents of this folder to the repository root (not the containing folder).
-3. In GitHub, open **Settings → Pages**.
-4. Select **Deploy from a branch**, choose `main` and `/ (root)`, then save.
-5. Wait for the Pages deployment and open `https://YOUR_GITHUB_USERNAME.github.io`.
+1. Extract this ZIP and upload all files and folders to the root of your GitHub repository.
+2. Commit and push the files to your default branch.
+3. In the repository, open **Settings → Pages**.
+4. Under **Build and deployment**, choose **Deploy from a branch**.
+5. Select your default branch and the `/ (root)` folder, then save.
 
-For official details, see:
-- https://docs.github.com/en/pages
-- https://docs.github.com/en/rest/repos/repos#list-repositories-for-a-user
+GitHub Pages will publish the site. It may take a short time for the first deployment to become available.
 
-## Notes
+## Included assets
 
-- No framework, build step, API key or server is required.
-- Animations respect the visitor's reduced-motion preference.
-- The CV included is a starter profile document. Replace it with your verified, complete CV before sharing the site professionally.
+- `assets/rejoan-profile.png` — portrait extracted from the supplied CV.
+- `assets/Rejoan_Hasan_Mugdho_CV.pdf` — CV download linked from the website.
+- `assets/favicon.svg` — custom browser icon.
+
+## Customize
+
+- Edit page content in `index.html`.
+- Change colors, layout, and responsive styles in `styles.css`.
+- Update mobile navigation, scroll progress, and reveal effects in `script.js`.
+
+External Google Fonts are used for typography. The site itself has no runtime dependencies; it remains usable with system-font fallbacks if the font service is unavailable.
