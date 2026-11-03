@@ -11,7 +11,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-const texts = ["Cybersecurity Enthusiast", "Competitive Coder", "Software Engineer"];
+const texts = ["Software Engineer", "Cybersecurity Enthusiast", "Competitive Programmer", "Linux Administrator"];
 let count = 0;
 let index = 0;
 let currentText = '';
@@ -25,25 +25,29 @@ if (typingElement) {
             count = 0;
         }
         currentText = texts[count];
+        
         if (isDeleting) {
             letter = currentText.slice(0, --index);
         } else {
             letter = currentText.slice(0, ++index);
         }
+        
         typingElement.textContent = letter;
 
-        let typeSpeed = 100;
+        let typeSpeed = 80;
         if (isDeleting) {
             typeSpeed /= 2;
         }
+        
         if (!isDeleting && letter.length === currentText.length) {
             isDeleting = true;
-            typeSpeed = 2000;
+            typeSpeed = 2500; // Pause at end of word
         } else if (isDeleting && letter.length === 0) {
             isDeleting = false;
             count++;
-            typeSpeed = 500;
+            typeSpeed = 500; // Pause before next word
         }
+        
         setTimeout(type, typeSpeed);
     }());
 }
@@ -51,8 +55,10 @@ if (typingElement) {
 window.addEventListener('scroll', () => {
     const nav = document.querySelector('.navbar');
     if (window.scrollY > 50) {
-        nav.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
+        nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+        nav.style.background = 'rgba(7, 9, 15, 0.95)';
     } else {
         nav.style.boxShadow = 'none';
+        nav.style.background = 'rgba(7, 9, 15, 0.85)';
     }
 });

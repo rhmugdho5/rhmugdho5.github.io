@@ -1,8 +1,12 @@
-# Rejoan Hasan Mugdho - Professional Portfolio
+# Rejoan Hasan Mugdho - Portfolio V2
 
-A sleek, responsive, dark-themed portfolio website designed for my software engineering and cybersecurity journey.
+This is the fully updated professional portfolio built from your CV and assets. 
 
-## Setup Instructions
-1. Unzip the archive.
-2. Open `index.html` in any modern web browser.
-3. The project is fully static (HTML, CSS, JS) and requires no build steps.
+## Instructions for Images and PDF
+1. **Profile Image**: The code is configured to look for your image named `5312.png`. Just drop `5312.png` into the `assets` folder!
+2. **CV Download**: Place your PDF CV inside the `assets` folder and name it exactly `Rejoan_Hasan_Mugdho_CV.pdf` so the download button works perfectly.
+
+## Tech Stack
+- HTML5, CSS3, Vanilla JS
+- FontAwesome Icons
+- Google Fonts (Inter, Fira Code)
