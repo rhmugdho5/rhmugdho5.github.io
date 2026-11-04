@@ -1,6 +1,6 @@
 # Rejoan Hasan Mugdho — Portfolio
 
-Premium dark portfolio built with plain HTML, CSS and JavaScript. **No build step, no backend, no dependencies.**
+Premium dark, cybersecurity-themed portfolio built with plain HTML, CSS and JavaScript. **No build step, no backend, no dependencies.**
 All content is rendered from the files in `data/`, so you update the site by editing data, not HTML.
 
 ```text
@@ -11,7 +11,8 @@ rhmugdho5.github.io/
 ├── data/
 │   ├── profile.js        name, tagline, intro, about text, semester, email, phone, photo & CV paths
 │   ├── education.js      education timeline
-│   ├── skills.js         skill groups + "currently strengthening" strip
+│   ├── journey.js        interactive "focus map" (learning journey)
+│   ├── skills.js         capability map: used skills vs currently learning
 │   ├── projects.js       project cards
 │   ├── certifications.js certifications & training
 │   ├── achievements.js   achievements + competitions
@@ -37,7 +38,13 @@ To preview locally just double-click `index.html` (works offline except Google F
 | Add a certificate | Copy a block into `data/certifications.js` (add `date` and `url` when you have them) |
 | Add an achievement / competition | `data/achievements.js` |
 | Update my semester | `semester: "Semester 3"` in `data/profile.js` (shows in hero + education). `""` hides it |
-| Add / remove a skill | `data/skills.js` → `items` |
+| Add a skill you have used | `data/skills.js` → that group's `items` |
+| Add something you are learning | `data/skills.js` → that group's `learning` (move it to `items` once you have really used it) |
+| Edit the focus map | `data/journey.js` (status: `using`, `learning` or `interest`) |
+| Edit hero panel / terminal card | `heroPanel` and `terminal` in `data/profile.js` |
+| Change rotating hero text | `typingPhrases` in `data/profile.js` |
+| Add a real project screenshot | `image:` in `data/projects.js`; it replaces the illustrated preview |
+| Add certificate details | `details:` in `data/certifications.js` (shown when the card is expanded) |
 | Change social links | `data/social.js` |
 | Change email / phone | `data/profile.js` (`phone: ""` hides it) |
 | Replace my CV | Overwrite `assets/cv.pdf` (keep the name) |
@@ -52,12 +59,19 @@ Social-preview and search tags can't use JavaScript, so if your name, descriptio
 ## Deploy
 Copy everything inside this folder (including the hidden `.nojekyll`) into your `rhmugdho5.github.io` repository root, replacing the old files. Delete the old `config.js` and `assets/Rejoan_Hasan_Mugdho_CV.pdf` — they are no longer used. Then commit and push.
 
+## What's in the visual system
+- Animated hero: drifting grid, a lightweight network canvas (pauses when off-screen or the tab is hidden), orbit lines and a status panel around the portrait.
+- Project previews are **original illustrations** (HTML/CSS/SVG/ASCII), labelled "illustrative preview". They are not screenshots and show no real data.
+- Everything decorative is non-informational; every number shown (project, language and certificate counts) is computed from your data files.
+- Desktop extras: cursor ring, subtle portrait tilt and parallax. All are disabled on touch devices and under `prefers-reduced-motion`.
+
 ## Notes
 - Animations are lightweight (CSS + IntersectionObserver) and disabled under `prefers-reduced-motion`.
 - GitHub stats and recent repos load from GitHub's public API and are cached for 10 minutes in the tab; if offline or rate-limited, that part is simply hidden.
 - Fonts (Inter, Space Grotesk, JetBrains Mono) load from Google Fonts with system fallbacks.
 
 ## Content to double-check (flagged during the build)
+0. **Skill status** (`used` vs `learning`) follows the CV: Data Structures & Algorithms and computer systems are listed as "currently strengthening", so they appear under *learning*. **Certificate `details`** only restate each title; replace them with what you actually learned. Edit anything that does not match reality.
 1. **Project repo URLs** are blank on purpose: none were in your CV or old site. Add them in `projects.js`.
 2. **Sirat** details beyond "Salah, Dhikr" (Quran, habits, zakat, duas, goals, role-based users, team project) come from your old site, not the CV. Remove what is not accurate. **MySphere** has only the CV's one-line description, so its features are deliberately minimal.
 3. **Space Invaders**: the CV calls it "ASCII Game", the old site "Galactic Warfare – Deluxe Edition". Both are shown.

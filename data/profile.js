@@ -18,12 +18,30 @@ window.SITE.profile = {
 
   // The typing animation in the hero cycles through these. Add/remove freely.
   typingPhrases: [
-    "Cybersecurity",
-    "Secure Software Development",
-    "Linux & Systems",
-    "Problem Solving",
+    "Cybersecurity Enthusiast",
+    "Computer Science Student",
+    "Developer",
+    "Problem Solver",
+    "Lifelong Learner",
   ],
-  typingPrefix: "Currently exploring",
+  typingPrefix: "I'm a",
+
+  // Small system-status panel on the hero portrait (key / value rows).
+  // A "university" row is added automatically from the fields below.
+  heroPanel: [
+    { k: "status", v: "Learning & building" },
+    { k: "focus",  v: "Cybersecurity" },
+  ],
+
+  // Terminal card in the About section. Keep every line truthful.
+  // Each entry: cmd = what follows "$", out = the printed result.
+  terminal: [
+    { cmd: "whoami",           out: "rejoan-hasan-mugdho" },
+    { cmd: "focus --current",  out: "Cybersecurity | Development | Problem Solving" },
+    { cmd: "education",        out: "B.Sc. CSE · North South University · 2025 – present" },
+    { cmd: "languages --used", out: "C, Java, C++" },
+    { cmd: "status",           out: "learning, building, open to opportunities" },
+  ],
 
   // University line. `semester` is optional — set e.g. "Semester 3" or "3rd Semester"
   // and it appears in the hero and education timeline. Leave "" to hide it.
@@ -66,7 +84,7 @@ window.SITE.profile = {
 
   // Contact (from CV). Email link is built from `email`.
   email: "rhmugdho5@gmail.com",
-              // set "" to hide the phone card
+  phone: "+880 1930361178",            // set "" to hide the phone card
   emailSubject: "Hello Rejoan — via your portfolio",
   contactHeading: "Let's talk about security, software, or opportunities.",
   contactText:

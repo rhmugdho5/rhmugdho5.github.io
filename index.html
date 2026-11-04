@@ -6,7 +6,7 @@
   <title>Rejoan Hasan Mugdho — CSE Student &amp; Cybersecurity Enthusiast</title>
   <meta name="description" content="Portfolio of Rejoan Hasan Mugdho, a Computer Science &amp; Engineering student at North South University focused on cybersecurity. Building secure systems. Solving real problems.">
   <meta name="author" content="Rejoan Hasan Mugdho">
-  <meta name="theme-color" content="#070B12">
+  <meta name="theme-color" content="#050912">
   <link rel="canonical" href="https://rhmugdho5.github.io/">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
@@ -43,7 +43,7 @@
       <nav aria-label="Primary">
         <ul class="nav-links" id="navLinks">
           <li><a href="#about">About</a></li>
-          <li><a href="#education">Education</a></li>
+          <li><a href="#journey">Journey</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#credentials">Achievements</a></li>
@@ -58,68 +58,96 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero" id="home" aria-labelledby="heroName">
-      <div class="hero-bg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i></div>
+      <div class="hero-bg" aria-hidden="true"><div class="gridfx"></div><canvas id="net"></canvas><i class="orb o1"></i><i class="orb o2"></i></div>
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="pill reveal" id="heroAvail"></p>
+          <p class="status reveal" id="heroAvail"></p>
           <h1 id="heroName" class="reveal"><span data-text="profile.firstName"></span><span class="grad" data-text="profile.lastName"></span></h1>
           <p class="role reveal" data-text="profile.title"></p>
+          <p class="typing reveal"><span class="pr" aria-hidden="true">›</span> <span data-text="profile.typingPrefix"></span> <b id="typed"></b><i class="caret" aria-hidden="true"></i></p>
           <p class="tagline reveal" id="tagline"></p>
-          <p class="typing reveal"><span data-text="profile.typingPrefix"></span> <b id="typed"></b><i class="caret" aria-hidden="true"></i></p>
           <p class="intro reveal" data-text="profile.intro"></p>
           <div class="cta reveal">
-            <a class="btn primary" id="cvBtn" href="#"><span data-icon="download"></span>Download CV</a>
-            <a class="btn ghost" href="#projects"><span data-icon="code"></span>Explore Projects</a>
+            <a class="btn primary" href="#projects"><span data-icon="code"></span>Explore My Projects</a>
+            <a class="btn ghost" id="cvBtn" href="#"><span data-icon="download"></span>Download CV</a>
+            <a class="btn ghost" href="#contact"><span data-icon="mail"></span>Connect With Me</a>
           </div>
           <div class="hero-social reveal" id="heroSocial"></div>
         </div>
         <figure class="portrait reveal" id="portrait">
-          <div class="frame"><img id="photo" width="880" height="1100" alt="" fetchpriority="high"></div>
-          <figcaption class="chip c1"><span data-icon="graduation"></span><span id="chipUni"></span></figcaption>
-          <figcaption class="chip c2"><span data-icon="shield"></span>Cybersecurity focus</figcaption>
+          <svg class="orbits" viewBox="0 0 500 620" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <ellipse cx="250" cy="310" rx="238" ry="298" fill="none" stroke="rgba(0,230,173,.3)" stroke-dasharray="2 7"/>
+            <ellipse cx="250" cy="310" rx="226" ry="287" fill="none" stroke="rgba(54,169,255,.28)"/>
+            <circle r="3.5" fill="#00E6AD"><animateMotion dur="26s" repeatCount="indefinite" path="M12,310 a238,298 0 1,0 476,0 a238,298 0 1,0 -476,0"/></circle>
+            <circle r="3" fill="#36A9FF"><animateMotion dur="34s" repeatCount="indefinite" path="M24,310 a226,287 0 1,1 452,0 a226,287 0 1,1 -452,0"/></circle>
+            <circle r="2.5" fill="#EAF2F8" opacity=".7"><animateMotion dur="42s" begin="-14s" repeatCount="indefinite" path="M12,310 a238,298 0 1,0 476,0 a238,298 0 1,0 -476,0"/></circle>
+          </svg>
+          <div class="frame" id="frame">
+            <img id="photo" width="880" height="1100" alt="" fetchpriority="high">
+            <i class="brk" aria-hidden="true"></i>
+            <div class="panel" aria-label="Profile status">
+              <div class="p-h"><i aria-hidden="true"></i>system.status</div>
+              <dl id="panelRows"></dl>
+            </div>
+          </div>
+          <span class="lab l1" aria-hidden="true">// profile.01</span>
+          <span class="lab l2" aria-hidden="true" id="labUni"></span>
         </figure>
       </div>
+      <a class="scroll-hint" href="#about" aria-label="Scroll to About"><span></span></a>
     </section>
 
     <!-- ABOUT -->
     <section class="section" id="about" aria-labelledby="aboutH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">01 — About</span><h2 id="aboutH">Curious by nature, <em>security-minded</em> by choice.</h2></header>
+        <header class="sec-head reveal"><span class="eyebrow">01 · about</span><h2 id="aboutH">Curious by nature, <em>security-minded</em> by choice.</h2></header>
         <div class="bento" id="aboutGrid"></div>
       </div>
     </section>
 
-    <!-- EDUCATION -->
-    <section class="section alt" id="education" aria-labelledby="eduH">
+    <!-- JOURNEY -->
+    <section class="section alt" id="journey" aria-labelledby="journeyH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">02 — Education</span><h2 id="eduH">Academic <em>journey</em></h2></header>
-        <ol class="timeline" id="eduList"></ol>
+        <header class="sec-head reveal"><span class="eyebrow">02 · learning journey</span><h2 id="journeyH">Learning with <em>direction</em>.</h2>
+          <p class="sec-sub">Where I study today and where I am heading. Focus areas are shown honestly: what I use, what I am learning, and what I want to grow into.</p></header>
+        <div class="journey-grid">
+          <div><h3 class="sub reveal">Education</h3><ol class="timeline" id="eduList"></ol></div>
+          <div class="fm reveal">
+            <h3 class="sub">Focus map <span class="hint">select a node</span></h3>
+            <div class="card fm-card">
+              <svg id="fmSvg" viewBox="0 0 560 340" role="img" aria-label="Network map connecting cybersecurity with my learning focus areas"></svg>
+              <div class="fm-chips" id="fmChips"></div>
+              <div class="fm-detail" id="fmDetail" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- SKILLS -->
     <section class="section" id="skills" aria-labelledby="skillsH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">03 — Technical Skills</span><h2 id="skillsH">Tools I <em>build with</em></h2></header>
-        <div class="skill-grid" id="skillGrid"></div>
-        <p class="learning reveal" id="learning"></p>
+        <header class="sec-head reveal"><span class="eyebrow">03 · capability map</span><h2 id="skillsH">What I <em>use</em> and what I'm <em>learning</em>.</h2></header>
+        <div class="sk-bar reveal" id="skBar"></div>
+        <div class="skill-grid" id="skillGrid" data-f="all"></div>
       </div>
     </section>
 
     <!-- PROJECTS -->
     <section class="section alt" id="projects" aria-labelledby="projH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">04 — Featured Projects</span><h2 id="projH">Things I've <em>built</em></h2></header>
-        <div class="proj-grid" id="projGrid"></div>
+        <header class="sec-head reveal"><span class="eyebrow">04 · featured projects</span><h2 id="projH">Things I've <em>built</em>.</h2>
+          <p class="sec-sub">Four projects in C and Java. The previews are original illustrations of each project, not screenshots.</p></header>
+        <div class="proj-list" id="projGrid"></div>
       </div>
     </section>
 
     <!-- CERTIFICATIONS & ACHIEVEMENTS -->
     <section class="section" id="credentials" aria-labelledby="credH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">05 — Certifications &amp; Achievements</span><h2 id="credH">Learning, <em>recognised</em></h2></header>
+        <header class="sec-head reveal"><span class="eyebrow">05 · certifications &amp; achievements</span><h2 id="credH">Learning, <em>recognised</em>.</h2></header>
         <div class="cred-layout">
-          <div><h3 class="sub reveal">Certifications &amp; Training</h3><ul class="cert-grid" id="certGrid"></ul></div>
+          <div><h3 class="sub reveal">Certifications &amp; Training <span class="hint">tap a card for details</span></h3><ul class="cert-grid" id="certGrid"></ul></div>
           <div class="cred-side">
             <div><h3 class="sub reveal">Achievements &amp; Recognition</h3><ul class="stack" id="achList"></ul></div>
             <div><h3 class="sub reveal">Competitions &amp; Participation</h3><ul class="stack" id="compList"></ul></div>
@@ -131,7 +159,7 @@
     <!-- PROFILES -->
     <section class="section alt" id="profiles" aria-labelledby="profH">
       <div class="wrap">
-        <header class="sec-head reveal"><span class="eyebrow">06 — Coding Profiles</span><h2 id="profH">Find me <em>online</em></h2></header>
+        <header class="sec-head reveal"><span class="eyebrow">06 · coding profiles</span><h2 id="profH">Find me <em>online</em>.</h2></header>
         <div class="prof-grid" id="profGrid"></div>
         <div class="repos reveal" id="repos" hidden><h3 class="sub">Recently updated on GitHub</h3><ul class="repo-list" id="repoList"></ul></div>
       </div>
@@ -141,7 +169,7 @@
     <section class="section" id="contact" aria-labelledby="contactH">
       <div class="wrap">
         <div class="contact-card reveal">
-          <span class="eyebrow">07 — Contact</span>
+          <span class="eyebrow">07 · contact</span>
           <h2 id="contactH" data-text="profile.contactHeading"></h2>
           <p data-text="profile.contactText"></p>
           <a class="btn primary big" id="mailBtn" href="#"><span data-icon="mail"></span><span>Send me an email</span></a>
@@ -154,6 +182,7 @@
   <footer class="footer">
     <div class="wrap foot-in">
       <p>© <span id="year"></span> <span data-text="profile.name"></span>. Built with HTML, CSS &amp; JavaScript.</p>
+      <p class="foot-cmd" aria-hidden="true">$ echo "<span data-text="profile.tagline"></span>"</p>
       <a href="#home">Back to top ↑</a>
     </div>
   </footer>
@@ -162,6 +191,7 @@
 
   <script src="data/profile.js"></script>
   <script src="data/education.js"></script>
+  <script src="data/journey.js"></script>
   <script src="data/skills.js"></script>
   <script src="data/projects.js"></script>
   <script src="data/certifications.js"></script>

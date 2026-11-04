@@ -1,32 +1,32 @@
 /* ============================================================
-   SKILLS — grouped. Source: CV "Technical Skills".
-   No percentages on purpose: list what you can honestly use.
-   To add a skill: add a string to `items`. To add a group: copy a block.
-   `icon` options: code, brain, tool, layers, terminal, spark
+   SKILLS — the capability map. Source: CV "Technical Skills" and interests.
+   Each group has two honest lists:
+     items    = skills you HAVE USED (shown with a solid emerald dot)
+     learning = things you are CURRENTLY LEARNING / STRENGTHENING (blue dashed)
+   No percentages on purpose. Move a skill from `learning` to `items`
+   when you have really used it in a project or coursework.
+   `icon` options: code, brain, tool, layers, terminal, shield, spark
    ============================================================ */
 window.SITE = window.SITE || {};
 
 window.SITE.skills = [
   { group: "Programming Languages", icon: "code",
-    items: ["C", "Java", "C++"] },
+    items: ["C", "Java", "C++"], learning: [] },
 
   { group: "Computer Science Fundamentals", icon: "brain",
-    items: ["Object-Oriented Programming", "Data Structures & Algorithms", "Problem Solving", "File Handling"] },
+    items: ["Object-Oriented Programming", "Problem Solving", "File Handling"],
+    learning: ["Data Structures & Algorithms"] },
 
   { group: "Development Tools", icon: "tool",
-    items: ["Git", "GitHub", "VS Code"] },
-
-  { group: "Technologies", icon: "layers",
-    items: ["Java Swing"] },
+    items: ["Git", "GitHub", "VS Code", "Java Swing"], learning: [] },
 
   { group: "Operating Systems", icon: "terminal",
-    items: ["Linux / Fedora"] },
+    items: ["Linux / Fedora"], learning: ["Computer systems"] },
 
-  { group: "Other Skills", icon: "spark",
-    items: ["Touch Typing", "Microsoft Office"] },
-];
+  { group: "Cybersecurity Interests", icon: "shield",
+    items: [],
+    learning: ["Cybersecurity fundamentals", "Secure software development", "Computer networks", "Linux & system administration"] },
 
-// Shown as a "currently strengthening" strip under the skills. Set [] to hide.
-window.SITE.learning = [
-  "Data Structures", "Algorithms", "Computer Systems", "Cybersecurity",
+  { group: "Other Technical Skills", icon: "spark",
+    items: ["Touch Typing", "Microsoft Office"], learning: [] },
 ];

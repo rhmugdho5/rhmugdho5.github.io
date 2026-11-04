@@ -13,6 +13,9 @@
    - demo              : live demo URL. Leave "" to hide.
    - image             : optional screenshot, e.g. "assets/projects/sirat.png".
                          Leave "" to use the generated cover.
+   - visual            : built-in illustrated preview: sirat, mysphere, pact, invaders
+                         (any other value falls back to a clean icon cover).
+                         A real `image` screenshot always overrides it.
    - icon              : cover icon: moon, wallet, checklist, invader, shield, code
    - accent            : "emerald" or "blue" (cover colour)
    ============================================================ */
@@ -35,7 +38,7 @@ window.SITE.projects = [
     github: "",
     demo: "",
     image: "",
-    icon: "moon",
+    visual: "sirat", icon: "moon",
     accent: "emerald",
   },
   {
@@ -53,7 +56,7 @@ window.SITE.projects = [
     github: "",
     demo: "",
     image: "",
-    icon: "wallet",
+    visual: "mysphere", icon: "wallet",
     accent: "blue",
   },
   {
@@ -72,7 +75,7 @@ window.SITE.projects = [
     github: "",
     demo: "",
     image: "",
-    icon: "checklist",
+    visual: "pact", icon: "checklist",
     accent: "emerald",
   },
   {
@@ -91,7 +94,7 @@ window.SITE.projects = [
     github: "",
     demo: "",
     image: "",
-    icon: "invader",
+    visual: "invaders", icon: "invader",
     accent: "blue",
   },
 ];
