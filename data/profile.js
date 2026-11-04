@@ -84,7 +84,7 @@ window.SITE.profile = {
 
   // Contact (from CV). Email link is built from `email`.
   email: "rhmugdho5@gmail.com",
-  phone: "+880 1930361178",            // set "" to hide the phone card
+  //phone: "+880 1930361178",            // set "" to hide the phone card
   emailSubject: "Hello Rejoan — via your portfolio",
   contactHeading: "Let's talk about security, software, or opportunities.",
   contactText:
