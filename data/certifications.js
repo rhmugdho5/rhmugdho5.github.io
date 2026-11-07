@@ -1,18 +1,78 @@
 /* ============================================================
-   CERTIFICATIONS & TRAINING — source: CV.
-   The CV lists no dates or credential IDs, so none are shown.
-   Fields: title, issuer, details (shown when the card is expanded), type ("Course" | "Certificate" | "Training"),
-           date (optional, e.g. "Mar 2026"), url (optional verify link),
-           note (optional).
-   Add a certificate: copy a block to the TOP of the list.
-   ============================================================ */
-window.SITE = window.SITE || {};
+   CERTIFICATIONS & TRAINING
+   ------------------------------------------------------------
+   Each entry becomes a card in the "Credentials" wall.
 
-window.SITE.certifications = [
-  { title: "CS50x: Introduction to Computer Science", details: "Harvard's introduction to computer science and programming.", issuer: "Harvard University", type: "Course", date: "", url: "" },
-  { title: "Automating Passive Web Application Recon with n8n & AI", details: "Cyberwarfare Labs training on automating passive web-application reconnaissance with n8n workflows and AI.", issuer: "Cyberwarfare Labs", type: "Training", date: "", url: "" },
-  { title: "The Rise of Agentic Adversary", details: "Cyberwarfare Labs training on the rise of agentic, AI-driven adversaries.", issuer: "Cyberwarfare Labs", type: "Training", date: "", url: "" },
-  { title: "C Programming Course", details: "Foundations of C programming, the language I use in PACT and Space Invaders.", issuer: "10 Minute School", type: "Course", date: "", url: "" },
-  { title: "Basics of Management", details: "Introductory course on management fundamentals.", issuer: "10 Minute School", type: "Course", date: "", url: "" },
-  { title: "Fire Safety Awareness", details: "Awareness course on fire-safety fundamentals.", issuer: "10 Minute School", type: "Course", date: "", url: "" },
+   Fields:
+     title    – name of the course / certificate
+     issuer   – organization that issued it
+     date     – e.g. "Mar 2026". Leave "" if unknown (hidden, never invented)
+     category – small tag: "Computer Science", "Cybersecurity", "Programming",
+                "Professional Skills", ... (any text; used for the card tag)
+     url      – link to the certificate / verification page, or ""
+     details  – optional 1–2 sentences shown when the card is expanded
+     topics   – optional list of topic tags shown when expanded
+     featured – true gives the card a subtle highlight
+
+   Dates are empty because the CV does not state them. Fill them in
+   whenever you like — they will appear automatically.
+
+   EXAMPLE of a new certification:
+     {
+       title: "Certificate Name",
+       issuer: "Issuing Organization",
+       date: "Jan 2027",
+       category: "Cybersecurity",
+       url: "https://example.com/verify/123",
+     },
+   ============================================================ */
+window.PORTFOLIO = window.PORTFOLIO || {};
+
+window.PORTFOLIO.certifications = [
+  {
+    title: "CS50x: Introduction to Computer Science",
+    issuer: "Harvard University",
+    date: "",
+    category: "Computer Science",
+    url: "",
+    details: "Harvard's introductory computer science course.",
+    featured: true,
+  },
+  {
+    title: "Automating Passive Web Application Recon with n8n & AI",
+    issuer: "Cyberwarfare Labs",
+    date: "",
+    category: "Cybersecurity",
+    url: "",
+    topics: ["Web application reconnaissance", "n8n", "AI"],
+    featured: true,
+  },
+  {
+    title: "The Rise of Agentic Adversary",
+    issuer: "Cyberwarfare Labs",
+    date: "",
+    category: "Cybersecurity",
+    url: "",
+  },
+  {
+    title: "C Programming Course",
+    issuer: "10 Minute School",
+    date: "",
+    category: "Programming",
+    url: "",
+  },
+  {
+    title: "Basics of Management",
+    issuer: "10 Minute School",
+    date: "",
+    category: "Professional Skills",
+    url: "",
+  },
+  {
+    title: "Fire Safety Awareness",
+    issuer: "10 Minute School",
+    date: "",
+    category: "Professional Skills",
+    url: "",
+  },
 ];

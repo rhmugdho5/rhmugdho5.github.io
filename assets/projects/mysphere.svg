@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Dashboard-style illustration for MySphere">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a2036"/><stop offset="1" stop-color="#060d18"/></linearGradient>
+    <linearGradient id="ac" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36A9FF"/><stop offset="1" stop-color="#00E6AD"/></linearGradient>
+    <linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36A9FF" stop-opacity=".35"/><stop offset="1" stop-color="#36A9FF" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1000" height="640" fill="url(#bg)"/>
+  <g transform="translate(70 60)">
+    <rect width="860" height="520" rx="16" fill="#0a1626" stroke="#9AAFBD" stroke-opacity=".22"/>
+    <!-- sidebar -->
+    <rect width="86" height="520" rx="16" fill="#0d1d30"/>
+    <circle cx="43" cy="46" r="17" fill="none" stroke="url(#ac)" stroke-width="3"/><circle cx="43" cy="46" r="6" fill="#36A9FF"/>
+    <g fill="none" stroke="#9AAFBD" stroke-opacity=".6" stroke-width="2.4" stroke-linecap="round">
+      <rect x="29" y="112" width="28" height="22" rx="4" stroke="#36A9FF" stroke-opacity="1"/><path d="M29 165h28M29 177h20M29 189h24M29 247h28M29 259h18"/><circle cx="43" cy="320" r="13"/>
+    </g>
+    <!-- header -->
+    <text x="126" y="58" font-family="Inter,system-ui,sans-serif" font-size="22" font-weight="700" fill="#EAF2F8">MySphere</text>
+    <rect x="126" y="70" width="110" height="9" rx="4.5" fill="#9AAFBD" fill-opacity=".25"/>
+    <rect x="690" y="36" width="130" height="36" rx="10" fill="#36A9FF" fill-opacity=".16" stroke="#36A9FF" stroke-opacity=".5"/>
+    <!-- stat cards (shapes only, no figures) -->
+    <g transform="translate(126 110)">
+      <rect width="210" height="104" rx="12" fill="#ffffff" fill-opacity=".035" stroke="#9AAFBD" stroke-opacity=".18"/><rect x="20" y="22" width="70" height="9" rx="4.5" fill="#9AAFBD" fill-opacity=".4"/><rect x="20" y="52" width="120" height="22" rx="6" fill="#36A9FF" fill-opacity=".8"/>
+      <g transform="translate(230 0)"><rect width="210" height="104" rx="12" fill="#ffffff" fill-opacity=".035" stroke="#9AAFBD" stroke-opacity=".18"/><rect x="20" y="22" width="70" height="9" rx="4.5" fill="#9AAFBD" fill-opacity=".4"/><rect x="20" y="52" width="96" height="22" rx="6" fill="#00E6AD" fill-opacity=".8"/></g>
+      <g transform="translate(460 0)"><rect width="234" height="104" rx="12" fill="#ffffff" fill-opacity=".035" stroke="#9AAFBD" stroke-opacity=".18"/><rect x="20" y="22" width="70" height="9" rx="4.5" fill="#9AAFBD" fill-opacity=".4"/><rect x="20" y="52" width="140" height="22" rx="6" fill="#9AAFBD" fill-opacity=".5"/></g>
+    </g>
+    <!-- area chart -->
+    <g transform="translate(126 236)">
+      <rect width="440" height="250" rx="12" fill="#ffffff" fill-opacity=".03" stroke="#9AAFBD" stroke-opacity=".18"/>
+      <g stroke="#9AAFBD" stroke-opacity=".1"><path d="M20 70H420M20 120H420M20 170H420M20 220H420"/></g>
+      <path d="M20 190C70 170 100 120 150 140S230 200 280 120 360 70 420 90V230H20z" fill="url(#ar)"/>
+      <path d="M20 190C70 170 100 120 150 140S230 200 280 120 360 70 420 90" fill="none" stroke="#36A9FF" stroke-width="3"/>
+      <circle cx="280" cy="120" r="6" fill="#0a1626" stroke="#36A9FF" stroke-width="3"/>
+    </g>
+    <!-- donut -->
+    <g transform="translate(600 236)">
+      <rect width="220" height="250" rx="12" fill="#ffffff" fill-opacity=".03" stroke="#9AAFBD" stroke-opacity=".18"/>
+      <g transform="translate(110 112) rotate(-90)" fill="none" stroke-width="22">
+        <circle r="62" stroke="#9AAFBD" stroke-opacity=".15"/>
+        <circle r="62" stroke="#36A9FF" stroke-dasharray="150 390"/>
+        <circle r="62" stroke="#00E6AD" stroke-dasharray="90 390" stroke-dashoffset="-158"/>
+        <circle r="62" stroke="#EAF2F8" stroke-opacity=".7" stroke-dasharray="50 390" stroke-dashoffset="-256"/>
+      </g>
+      <g fill="#9AAFBD" fill-opacity=".35"><rect x="30" y="200" width="70" height="8" rx="4"/><rect x="30" y="218" width="110" height="8" rx="4"/></g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-label="Management-console illustration for PACT">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1b2e"/><stop offset="1" stop-color="#050912"/></linearGradient>
+  </defs>
+  <rect width="1000" height="640" fill="url(#bg)"/>
+  <g transform="translate(70 60)" font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace">
+    <rect width="860" height="520" rx="12" fill="#08111d" stroke="#9AAFBD" stroke-opacity=".25"/>
+    <path d="M0 12a12 12 0 0 1 12-12h836a12 12 0 0 1 12 12v34H0z" fill="#0e1c2d"/>
+    <circle cx="26" cy="23" r="6" fill="#9AAFBD" fill-opacity=".35"/><circle cx="48" cy="23" r="6" fill="#9AAFBD" fill-opacity=".35"/><circle cx="70" cy="23" r="6" fill="#9AAFBD" fill-opacity=".35"/>
+    <text x="104" y="28" font-size="14" fill="#9AAFBD">pact <tspan fill="#00E6AD">&gt;</tspan> console</text>
+    <!-- menu -->
+    <rect x="0" y="46" width="210" height="474" fill="#0a1524"/><path d="M210 46V520" stroke="#9AAFBD" stroke-opacity=".18"/>
+    <g font-size="16">
+      <text x="28" y="92" fill="#6f8599" font-size="12" letter-spacing="2">MENU</text>
+      <rect x="14" y="108" width="182" height="40" rx="6" fill="#00E6AD" fill-opacity=".13" stroke="#00E6AD" stroke-opacity=".45"/><text x="32" y="134" fill="#00E6AD">[1] Users</text>
+      <text x="32" y="176" fill="#cfe0ea">[2] Programs</text>
+      <text x="32" y="216" fill="#cfe0ea">[3] Tasks</text>
+      <text x="32" y="256" fill="#cfe0ea">[4] Deadlines</text>
+      <text x="32" y="296" fill="#cfe0ea">[5] Accountability</text>
+      <text x="32" y="336" fill="#6f8599">[0] Exit</text>
+    </g>
+    <!-- table skeleton -->
+    <g transform="translate(246 80)">
+      <text x="0" y="16" font-size="12" fill="#6f8599" letter-spacing="2">USERS</text>
+      <rect x="0" y="34" width="580" height="36" rx="6" fill="#ffffff" fill-opacity=".04"/>
+      <g fill="#9AAFBD" fill-opacity=".55"><rect x="16" y="48" width="60" height="8" rx="4"/><rect x="190" y="48" width="80" height="8" rx="4"/><rect x="380" y="48" width="70" height="8" rx="4"/><rect x="500" y="48" width="50" height="8" rx="4"/></g>
+      <g>
+        <g transform="translate(0 86)"><rect width="580" height="44" rx="6" fill="none" stroke="#9AAFBD" stroke-opacity=".14"/><rect x="16" y="17" width="110" height="10" rx="5" fill="#EAF2F8" fill-opacity=".75"/><rect x="190" y="17" width="130" height="10" rx="5" fill="#9AAFBD" fill-opacity=".45"/><rect x="380" y="17" width="90" height="10" rx="5" fill="#9AAFBD" fill-opacity=".35"/><rect x="500" y="12" width="64" height="20" rx="10" fill="#00E6AD" fill-opacity=".2" stroke="#00E6AD" stroke-opacity=".6"/></g>
+        <g transform="translate(0 140)"><rect width="580" height="44" rx="6" fill="none" stroke="#9AAFBD" stroke-opacity=".14"/><rect x="16" y="17" width="90" height="10" rx="5" fill="#EAF2F8" fill-opacity=".75"/><rect x="190" y="17" width="100" height="10" rx="5" fill="#9AAFBD" fill-opacity=".45"/><rect x="380" y="17" width="120" height="10" rx="5" fill="#9AAFBD" fill-opacity=".35"/><rect x="500" y="12" width="64" height="20" rx="10" fill="#36A9FF" fill-opacity=".2" stroke="#36A9FF" stroke-opacity=".6"/></g>
+        <g transform="translate(0 194)"><rect width="580" height="44" rx="6" fill="none" stroke="#9AAFBD" stroke-opacity=".14"/><rect x="16" y="17" width="130" height="10" rx="5" fill="#EAF2F8" fill-opacity=".75"/><rect x="190" y="17" width="140" height="10" rx="5" fill="#9AAFBD" fill-opacity=".45"/><rect x="380" y="17" width="70" height="10" rx="5" fill="#9AAFBD" fill-opacity=".35"/><rect x="500" y="12" width="64" height="20" rx="10" fill="#9AAFBD" fill-opacity=".15" stroke="#9AAFBD" stroke-opacity=".4"/></g>
+        <g transform="translate(0 248)"><rect width="580" height="44" rx="6" fill="none" stroke="#9AAFBD" stroke-opacity=".14"/><rect x="16" y="17" width="100" height="10" rx="5" fill="#EAF2F8" fill-opacity=".75"/><rect x="190" y="17" width="120" height="10" rx="5" fill="#9AAFBD" fill-opacity=".45"/><rect x="380" y="17" width="100" height="10" rx="5" fill="#9AAFBD" fill-opacity=".35"/><rect x="500" y="12" width="64" height="20" rx="10" fill="#00E6AD" fill-opacity=".2" stroke="#00E6AD" stroke-opacity=".6"/></g>
+      </g>
+      <text x="0" y="344" font-size="15" fill="#00E6AD">$ <tspan fill="#EAF2F8">select option &gt; </tspan><tspan fill="#EAF2F8">_</tspan></text>
+    </g>
+  </g>
+</svg>

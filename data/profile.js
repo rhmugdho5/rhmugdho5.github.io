@@ -1,94 +1,133 @@
 /* ============================================================
-   PROFILE — your identity, hero text, about text, contact info.
-   Source: CV (Rejoan_Hasan_Mugdho.pdf). Edit values between quotes.
-   After saving: commit + push. No HTML editing needed.
+   PROFILE  —  your personal information
+   ------------------------------------------------------------
+   Edit the values between the quotes. Save, commit, push.
+   Anything left as "" (empty) is simply not shown on the site.
    ============================================================ */
-window.SITE = window.SITE || {};
+window.PORTFOLIO = window.PORTFOLIO || {};
 
-window.SITE.profile = {
+window.PORTFOLIO.profile = {
+  /* ---------- Identity ---------- */
   name: "Rejoan Hasan Mugdho",
-  firstName: "Rejoan Hasan",          // shown on line 1 of the hero heading
-  lastName: "Mugdho",                 // shown on line 2 (accent colour)
-  title: "Computer Science & Engineering Student",
+  firstName: "Rejoan",
+  designation: "Computer Science & Engineering Student",
   tagline: "Building Secure Systems. Solving Real Problems.",
 
-  // Hero intro (1–2 sentences)
+  /* Short intro shown in the hero (keep it to 2–3 sentences). */
   intro:
-    "CSE undergraduate at North South University with a primary interest in cybersecurity — learning by building practical projects in C and Java.",
+    "CSE undergraduate at North South University with hands-on experience in C and Java. I'm building a strong foundation in computer science, with cybersecurity as the field I'm most drawn to.",
 
-  // The typing animation in the hero cycles through these. Add/remove freely.
-  typingPhrases: [
+  /* Phrases that rotate in the typing animation under the name.
+     Add / remove / reword freely. (First phrase is shown if the visitor
+     prefers reduced motion.) */
+  typing: [
     "Cybersecurity Enthusiast",
     "Computer Science Student",
     "Developer",
     "Problem Solver",
     "Lifelong Learner",
   ],
-  typingPrefix: "I'm a",
 
-  // Small system-status panel on the hero portrait (key / value rows).
-  // A "university" row is added automatically from the fields below.
-  heroPanel: [
-    { k: "status", v: "Learning & building" },
-    { k: "focus",  v: "Cybersecurity" },
+  /* Small status line in the hero (pulsing dot). Keep it truthful and short. */
+  status: "Studying CSE · Focus: Cybersecurity",
+
+  /* Minimal "system status" panel next to the portrait. Each row is a
+     label + value. These are plain facts about you — edit freely. */
+  statusPanel: [
+    { label: "STATUS", value: "Student" },
+    { label: "PROGRAM", value: "B.Sc. CSE" },
+    { label: "FOCUS", value: "Cybersecurity" },
   ],
 
-  // Terminal card in the About section. Keep every line truthful.
-  // Each entry: cmd = what follows "$", out = the printed result.
+  /* Terminal card in the About section. Lines starting with "$" are commands,
+     everything else is output. Keep to real information. */
   terminal: [
-    { cmd: "whoami",           out: "rejoan-hasan-mugdho" },
-    { cmd: "focus --current",  out: "Cybersecurity | Development | Problem Solving" },
-    { cmd: "education",        out: "B.Sc. CSE · North South University · 2025 – present" },
-    { cmd: "languages --used", out: "C, Java, C++" },
-    { cmd: "status",           out: "learning, building, open to opportunities" },
+    "$ whoami",
+    "rejoan-hasan-mugdho",
+    "$ focus --current",
+    "Cybersecurity | Development | Problem Solving",
+    "$ education --now",
+    "B.Sc. CSE @ North South University",
+    "$ languages --used",
+    "C, Java",
   ],
 
-  // University line. `semester` is optional — set e.g. "Semester 3" or "3rd Semester"
-  // and it appears in the hero and education timeline. Leave "" to hide it.
+  /* ---------- Education snapshot (hero + about) ---------- */
   university: "North South University",
+  universityShort: "NSU",
   department: "Computer Science & Engineering",
-  semester: "",
+  degree: "B.Sc. in Computer Science & Engineering",
+  startYear: "2025",
 
-  location: "Bangladesh",              // set "" to hide
-  availability: "Open to internships, learning & collaboration", // set "" to hide
+  /* UPDATE EACH SEMESTER — e.g. "2nd Semester". Leave "" to hide it.
+     It appears in the hero card and on the Education timeline. */
+  currentSemester: "",
 
-  // Files (relative to index.html). To replace: overwrite the file, keep the name.
-  photo: "assets/profile.jpg",
-  photoAlt: "Portrait of Rejoan Hasan Mugdho",
-  cv: "assets/cv.pdf",
-  cvDownloadName: "Rejoan_Hasan_Mugdho_CV.pdf",
+  primaryInterest: "Cybersecurity",
 
-  // About section — each string is one paragraph.
-  about: [
-    "I'm a Computer Science & Engineering undergraduate at North South University, beginning my journey in 2025. My interest in cybersecurity is what pulls me deeper into computer systems, Linux and how software really works.",
-    "My programming foundation is in C and Java, with C++ also in my toolkit. I turn what I learn into practical projects — from a Java Swing expense tracker to a Windows-API console game — using procedural and object-oriented design.",
-    "I'm currently strengthening my knowledge of data structures, algorithms, computer systems and cybersecurity, and I keep a presence on competitive programming platforms. I am a student and a learner, and I aim to keep building things that solve real problems.",
-  ],
-  currentFocus: "Data structures, algorithms, computer systems & cybersecurity",
-
-  // Areas of interest (from CV)
-  interests: [
-    "Cybersecurity",
-    "Secure Software Development",
-    "Software Engineering",
-    "Linux & System Administration",
-    "Computer Networks",
-    "Data Structures & Algorithms",
-    "Problem Solving",
-  ],
-
-  languages: [
-    { name: "Bangla", level: "Native" },
-    { name: "English", level: "Professional Working Proficiency" },
-  ],
-
-  // Contact (from CV). Email link is built from `email`.
+  /* ---------- Contact ---------- */
   email: "rhmugdho5@gmail.com",
-  //phone: "+880 1930361178",            // set "" to hide the phone card
-  emailSubject: "Hello Rejoan — via your portfolio",
-  contactHeading: "Let's talk about security, software, or opportunities.",
-  contactText:
-    "Whether it's an internship, a project, a competition team or a question about something I've built — I'd be glad to hear from you.",
+  //phone: "+880 1930361178",          // shown as written
+  //phoneLink: "+8801930361178",       // used for tel: link (no spaces)
+  /* Subject line pre-filled when someone clicks "Email me". */
+  emailSubject: "Hello Rejoan — reaching out from your portfolio",
 
-  githubUsername: "rhmugdho5",        // used by the live GitHub stats
+  /* ---------- Files (replace the file, keep the name — or change here) ---------- */
+  cv: {
+    file: "assets/cv.pdf",
+    downloadName: "Rejoan_Hasan_Mugdho_CV.pdf",
+  },
+
+  /* Replace assets/profile.jpg (and .webp) with a new photo of the SAME NAME,
+     or change the paths here. Recommended: portrait 3:4, about 960×1280. */
+  photo: {
+    jpg: "assets/profile.jpg",
+    webp: "assets/profile.webp",
+    small: { jpg: "assets/profile-480.jpg", webp: "assets/profile-480.webp" },
+    width: 960,
+    height: 1280,
+    alt: "Portrait of Rejoan Hasan Mugdho outdoors in a green field",
+  },
+
+  /* ---------- About section ---------- */
+  about: {
+    heading: "A foundation built on fundamentals, pointed at security.",
+    paragraphs: [
+      "I'm a Computer Science & Engineering undergraduate at North South University, building my foundation in programming, data structures and algorithms, and computer systems.",
+      "I've built academic and personal projects in C and Java using both procedural and object-oriented approaches — from a Swing desktop expense tracker to a real-time console game with boss phases and power-ups.",
+      "Cybersecurity is the field I'm most drawn to. I'm learning it step by step alongside Linux, computer networks and secure software development, and I enjoy turning ideas into practical tools that actually work.",
+    ],
+    /* "What I'm focusing on now" card (taken from the CV profile). */
+    focusNow: [
+      "Data structures & algorithms",
+      "Computer systems",
+      "Cybersecurity",
+      "Linux & system administration",
+    ],
+    /* Spoken languages (from the CV). */
+    languages: [
+      { name: "Bangla", level: "Native" },
+      { name: "English", level: "Professional working proficiency" },
+    ],
+  },
+
+  /* Areas of interest (from the CV). `primary: true` highlights a tag. */
+  interests: [
+    { name: "Cybersecurity", primary: true },
+    { name: "Secure Software Development" },
+    { name: "Software Engineering" },
+    { name: "Linux & System Administration" },
+    { name: "Computer Networks" },
+    { name: "Data Structures & Algorithms" },
+    { name: "Problem Solving" },
+  ],
+
+  /* Contact section copy */
+  contact: {
+    heading: "Let's build something secure.",
+    text: "Open to conversations about internships, collaborations, projects and learning opportunities. The quickest way to reach me is email.",
+  },
+
+  /* Footer line */
+  footerNote: "Built with HTML, CSS & vanilla JavaScript.",
 };

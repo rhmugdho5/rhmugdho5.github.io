@@ -1,82 +1,85 @@
 # Rejoan Hasan Mugdho — Portfolio
 
-Premium dark, cybersecurity-themed portfolio built with plain HTML, CSS and JavaScript. **No build step, no backend, no dependencies.**
-All content is rendered from the files in `data/`, so you update the site by editing data, not HTML.
+Plain HTML, CSS and vanilla JavaScript. No build step, no dependencies, no backend. Works by double-clicking `index.html` and on GitHub Pages.
 
-```text
+**You almost never touch HTML.** The page is rendered from the files in `data/`.
+
+```
 rhmugdho5.github.io/
-├── index.html          page shell + SEO/Open Graph tags (rarely edited)
-├── styles.css          design system (colours are variables at the top)
-├── script.js           renders everything from /data (you normally never edit this)
+├── index.html          page skeleton + SEO tags (rarely edited)
+├── styles.css          design system (colour tokens at the top)
+├── script.js           renders the page + all interactions (no need to edit)
 ├── data/
-│   ├── profile.js        name, tagline, intro, about text, semester, email, phone, photo & CV paths
+│   ├── profile.js        name, intro, typing phrases, status, terminal card, semester, contact, CV & photo paths, about text
 │   ├── education.js      education timeline
-│   ├── journey.js        interactive "focus map" (learning journey)
-│   ├── skills.js         capability map: used skills vs currently learning
-│   ├── projects.js       project cards
-│   ├── certifications.js certifications & training
-│   ├── achievements.js   achievements + competitions
-│   └── social.js         GitHub, LinkedIn, LeetCode, Codeforces, AtCoder
+│   ├── learning.js       interactive learning map (focus areas + how they connect)
+│   ├── skills.js         capability map: categories + honest status per skill
+│   ├── projects.js       project showcase
+│   ├── certifications.js certificates & courses (expandable cards)
+│   ├── achievements.js   recognition + competitions
+│   └── social.js         GitHub / LinkedIn / LeetCode / Codeforces / AtCoder
 ├── assets/
-│   ├── cv.pdf  profile.jpg  favicon.svg  og-image.jpg
-│   └── projects/         put project screenshots here
-└── README.md
+│   ├── cv.pdf  profile.jpg/.webp  profile-480.*  favicon.svg
+│   ├── og-image.jpg  apple-touch-icon.png
+│   └── projects/         project preview artwork (replace with screenshots anytime)
+├── robots.txt  sitemap.xml  404.html  .nojekyll
 ```
 
-## Your workflow
+## What's new in this version
+- Animated network-topology background (canvas) in the hero and contact sections, plus a slowly flowing grid. Pauses off-screen and when the tab is hidden; a static frame is drawn for reduced-motion users.
+- Portrait composition with orbital lines, corner brackets, a decorative ID label and a small profile summary panel (real facts only). Subtle pointer parallax on desktop.
+- Rotating role line, terminal card in About, scroll progress bar, count-up numbers (counts are computed from your data files), refined cursor ring on desktop (the normal cursor stays visible).
+- **Learning map** (Journey section): interactive network of focus areas — click or use keyboard. Statuses: Hands-on / Currently learning / Exploring. Edit in `data/learning.js`.
+- **Capability map** (Skills): tabbed categories, every skill tagged *Used in projects*, *Listed skill*, *Currently learning* or *Area of interest*. No percentages.
+- **Projects**: large per-project showcases with their own accent colour and artwork; subtle 3D tilt on hover.
+- **Credentials**: expandable cards with details; filters.
+- Everything respects `prefers-reduced-motion`.
 
-Edit in VS Code → save → `git add . && git commit -m "Update portfolio" && git push` → GitHub Pages redeploys in about a minute.
-To preview locally just double-click `index.html` (works offline except Google Fonts and GitHub stats), or run `python3 -m http.server 8000` and open http://localhost:8000.
+## Deploy (your normal workflow)
 
-## How to update things
+1. Extract the ZIP and copy **everything** (including the hidden `.nojekyll`) into your `rhmugdho5.github.io` repo, replacing old files. Old files you no longer need: `assets/rejoan-profile.png`, `assets/Rejoan_Hasan_Mugdho_CV.pdf`.
+2. `git add -A && git commit -m "Update portfolio" && git push`
+3. Repo → Settings → Pages → Deploy from branch → `main` / root (only needed once).
+
+Preview locally: open `index.html`, or run `python3 -m http.server 8000` in the folder.
+
+## Everyday edits
 
 | I want to… | Edit |
 |---|---|
-| Add a project | Copy a block in `data/projects.js`, fill it in |
-| Add a project's GitHub / demo link | Set `github:` / `demo:` in that block. Empty = button hidden |
-| Add a project screenshot | Save it in `assets/projects/`, set `image: "assets/projects/name.png"` |
-| Add a certificate | Copy a block into `data/certifications.js` (add `date` and `url` when you have them) |
-| Add an achievement / competition | `data/achievements.js` |
-| Update my semester | `semester: "Semester 3"` in `data/profile.js` (shows in hero + education). `""` hides it |
-| Add a skill you have used | `data/skills.js` → that group's `items` |
-| Add something you are learning | `data/skills.js` → that group's `learning` (move it to `items` once you have really used it) |
-| Edit the focus map | `data/journey.js` (status: `using`, `learning` or `interest`) |
-| Edit hero panel / terminal card | `heroPanel` and `terminal` in `data/profile.js` |
-| Change rotating hero text | `typingPhrases` in `data/profile.js` |
-| Add a real project screenshot | `image:` in `data/projects.js`; it replaces the illustrated preview |
-| Add certificate details | `details:` in `data/certifications.js` (shown when the card is expanded) |
-| Change social links | `data/social.js` |
-| Change email / phone | `data/profile.js` (`phone: ""` hides it) |
-| Replace my CV | Overwrite `assets/cv.pdf` (keep the name) |
-| Replace my photo | Overwrite `assets/profile.jpg` (portrait 4:5, about 880×1100, under 150 KB) |
+| Update my semester | `data/profile.js` → `currentSemester: "3rd Semester"` (shows in hero chip + education timeline; `""` hides it) |
+| Change intro / about text / tagline / typing phrases | `data/profile.js` |
+| Add a project | copy a block in `data/projects.js`; put an image in `assets/projects/` |
+| Add a project's GitHub/demo link | fill `links.github` / `links.demo` in `data/projects.js` — empty links are never shown |
+| Add a certification | copy a block in `data/certifications.js` |
+| Add an award / competition | copy a block in `data/achievements.js` (`type: "recognition"` or `"competition"`) |
+| Add a skill | add `{ name: "...", status: "skill" }` to `items` in `data/skills.js` (status: `project`, `skill`, `learning`, `interest`) |
+| Add / change a learning-map topic | `data/learning.js` (give it an `id` and list it in `links` of related topics) |
+| Change the hero status line, rotating phrases, terminal card, status panel | `data/profile.js` |
+| Give a project its own colour / caption | `accent` and `imageNote` in `data/projects.js` |
+| Add expanded details to a certificate | `details`, `topics`, `url`, `date` in `data/certifications.js` |
+| Add education | copy a block in `data/education.js` |
+| Update social / coding links | `data/social.js` |
+| Replace my CV | overwrite `assets/cv.pdf` (same name). Different name? change `cv.file` in `profile.js` and the `href` of the two `data-cv` links is updated automatically |
+| Replace my photo | overwrite `assets/profile.jpg`, `profile.webp` (960×1280) and `profile-480.jpg/.webp` (480×640) |
 | Change colours | `:root` variables at the top of `styles.css` |
 
-Every data file has comments and examples. Keep the quotes and commas intact; if something breaks, open the browser console (F12) to see which file has the typo.
+Every data file has comments and a copy-paste example at the top. A trailing comma or missing quote is the usual cause of a blank section — open the browser console (F12) to see the error.
 
-## Things only editable in `index.html`
-Social-preview and search tags can't use JavaScript, so if your name, description, email or profile links ever change, also update the `<title>`, `description`, `og:` tags and the JSON-LD block in `<head>`.
+### Things still in HTML (edit only if they change)
+`index.html` holds the page `<title>`, meta description, Open Graph tags, the JSON-LD block and the download filename on the nav CV button. Update these if your name/university ever changes. Social-preview image: `assets/og-image.jpg` (1200×630).
 
-## Deploy
-Copy everything inside this folder (including the hidden `.nojekyll`) into your `rhmugdho5.github.io` repository root, replacing the old files. Delete the old `config.js` and `assets/Rejoan_Hasan_Mugdho_CV.pdf` — they are no longer used. Then commit and push.
+## GitHub API
+The Profiles section calls the public GitHub API (no key) to show your repo/follower count and a "Latest on GitHub" list. If it's blocked or rate-limited the section simply stays hidden. Turn off with `githubApi: false` in `data/social.js`. Use that list to copy each project's repository URL into `projects.js`.
 
-## What's in the visual system
-- Animated hero: drifting grid, a lightweight network canvas (pauses when off-screen or the tab is hidden), orbit lines and a status panel around the portrait.
-- Project previews are **original illustrations** (HTML/CSS/SVG/ASCII), labelled "illustrative preview". They are not screenshots and show no real data.
-- Everything decorative is non-informational; every number shown (project, language and certificate counts) is computed from your data files.
-- Desktop extras: cursor ring, subtle portrait tilt and parallax. All are disabled on touch devices and under `prefers-reduced-motion`.
-
-## Notes
-- Animations are lightweight (CSS + IntersectionObserver) and disabled under `prefers-reduced-motion`.
-- GitHub stats and recent repos load from GitHub's public API and are cached for 10 minutes in the tab; if offline or rate-limited, that part is simply hidden.
-- Fonts (Inter, Space Grotesk, JetBrains Mono) load from Google Fonts with system fallbacks.
-
-## Content to double-check (flagged during the build)
-0. **Skill status** (`used` vs `learning`) follows the CV: Data Structures & Algorithms and computer systems are listed as "currently strengthening", so they appear under *learning*. **Certificate `details`** only restate each title; replace them with what you actually learned. Edit anything that does not match reality.
-1. **Project repo URLs** are blank on purpose: none were in your CV or old site. Add them in `projects.js`.
-2. **Sirat** details beyond "Salah, Dhikr" (Quran, habits, zakat, duas, goals, role-based users, team project) come from your old site, not the CV. Remove what is not accurate. **MySphere** has only the CV's one-line description, so its features are deliberately minimal.
-3. **Space Invaders**: the CV calls it "ASCII Game", the old site "Galactic Warfare – Deluxe Edition". Both are shown.
-4. **Removed from the old site** because they are not in the CV: the planned *PassFort* project, "Python · Exploring", and "ICPC preparation". Add them back if true.
-5. **Certifications and achievements have no dates** in the CV, so none are shown (only "2026" from the LKTW event name).
-6. **Semester** is not stated in the CV; set it in `profile.js`.
-7. **LinkedIn URL** uses the CV's `bd.linkedin.com/...` form; your old site used `www.linkedin.com/...`. Both reach the same profile.
-8. The CV says CS50x is from "Harvard University"; it is kept as written.
+## Items to verify (flagged from the CV)
+- **Project repository links** aren't in the CV, so all are blank placeholders.
+- **Space Invaders:** your CV calls it "Space Invaders – ASCII Game"; "Galactic Warfare: Deluxe Edition" comes from your brief and is used as the subtitle. Edit if wrong.
+- **Certificate/achievement dates and issuer details** — the CV gives none for dates, so none are shown.
+- **Competitions** are described as participation (CV heading: "Competitions & Participation"); add `note` if you have a result.
+- **Project preview images** are original illustrations, not screenshots. Drop real screenshots into `assets/projects/` and update `image`.
+- **Semester** isn't in the CV: `currentSemester` is empty.
+- Fonts load from Google Fonts (Space Grotesk, Inter, JetBrains Mono); offline they fall back to system fonts. I could not render those exact fonts in my test environment, so check the look once on the live site.
+- Hero panel/label text ("STATUS · Student", "ID · RHM-01", "A·07") is decorative or taken from your CV — edit `statusPanel` in `profile.js`.
+- Skill statuses and learning-map wording are derived from your CV (projects, "currently strengthening", interests). Adjust them if any status is not accurate.
+- Lighthouse has not been run. If your browser console shows a GitHub API error, that is only the optional GitHub stats call being blocked/offline.

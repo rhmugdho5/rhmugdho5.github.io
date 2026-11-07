@@ -1,100 +1,108 @@
 /* ============================================================
-   PROJECTS — add a new project by copying one block and filling it in.
-   Newest/most important first. No HTML needed.
+   PROJECTS
+   ------------------------------------------------------------
+   Every object below becomes a project card. Order = display order.
 
-   Fields
-   - title, subtitle   : name + short label
-   - description       : 1–3 sentences
-   - features          : 3–5 short bullet points (only things that are true)
-   - tech              : technology tags
-   - type              : e.g. "Desktop app", "Console app", "Game"
-   - github            : full repo URL, e.g. "https://github.com/rhmugdho5/sirat"
-                         Leave "" and no button is shown (nothing broken).
-   - demo              : live demo URL. Leave "" to hide.
-   - image             : optional screenshot, e.g. "assets/projects/sirat.png".
-                         Leave "" to use the generated cover.
-   - visual            : built-in illustrated preview: sirat, mysphere, pact, invaders
-                         (any other value falls back to a clean icon cover).
-                         A real `image` screenshot always overrides it.
-   - icon              : cover icon: moon, wallet, checklist, invader, shield, code
-   - accent            : "emerald" or "blue" (cover colour)
+   Fields:
+     title        – project name
+     subtitle     – one-line tagline
+     category     – small label above the title (e.g. "Desktop Application")
+     description  – 1–3 sentences
+     features     – bullet list of key features (only things that are true!)
+     tech         – technology tags
+     accent       – colour used for this project's identity (any hex colour)
+     imageNote    – small caption on the preview. Keep "Illustration — not a
+                    screenshot" until you add a real screenshot, then set it to "".
+     image        – preview image path. SVG/PNG/JPG/WebP all work.
+                    Replace with a real screenshot any time, e.g.
+                    "assets/projects/sirat.png"
+     imageAlt     – alt text for the image
+     links.github – repository URL, or "" if not published / unknown
+     links.demo   – live demo URL, or "" if there is none
+     featured     – true makes the card span the full width (use sparingly)
+
+   LINKS: any link left as "" is NOT shown on the site, so there are
+   never broken buttons. Paste the URL in and it appears automatically.
+   Your repository names are listed live in the "Latest on GitHub" strip
+   (Profiles section) once the site is online — copy the URLs from there.
+
+   EXAMPLE of a new project (copy, paste above the closing ];):
+     {
+       title: "My New Project",
+       subtitle: "What it does in one line",
+       category: "Web Application",
+       description: "A short professional description.",
+       features: ["Feature one", "Feature two"],
+       tech: ["Python", "Flask"],
+       image: "assets/projects/my-new-project.png",
+       imageAlt: "Screenshot of My New Project",
+       links: { github: "https://github.com/rhmugdho5/my-new-project", demo: "" },
+     },
    ============================================================ */
-window.SITE = window.SITE || {};
+window.PORTFOLIO = window.PORTFOLIO || {};
 
-window.SITE.projects = [
+window.PORTFOLIO.projects = [
   {
     title: "Sirat",
     subtitle: "Your Islamic Life Companion",
-    type: "Desktop app · Team project",
+    category: "Desktop Application",
     description:
-      "A Java desktop application that brings an Islamic daily routine into one place, featuring Salah and Dhikr. Built with a Swing interface and object-oriented design.",
-    features: [
-      "Salah and Dhikr features",
-      "Further lifestyle modules: Quran reading, habits, zakat, duas and goals",
-      "Role-based users",
-      "File-based data handling",
-    ],
-    tech: ["Java", "Swing", "OOP", "File Handling"],
-    github: "",
-    demo: "",
-    image: "",
-    visual: "sirat", icon: "moon",
-    accent: "emerald",
+      "An Islamic lifestyle desktop application for everyday practice, built with Java Swing using object-oriented design.",
+    features: ["Salah", "Dhikr", "Java Swing graphical interface", "Object-oriented architecture"],
+    tech: ["Java", "Java Swing", "OOP"],
+    accent: "#00E6AD",
+    imageNote: "Illustration — not a screenshot",
+    image: "assets/projects/sirat.svg",
+    imageAlt: "Illustrated application window for Sirat with Salah and Dhikr sections",
+    links: {
+      github: "", // <- paste the repository URL here, e.g. "https://github.com/rhmugdho5/Sirat"
+      demo: "",
+    },
+    featured: false,
   },
   {
     title: "MySphere",
     subtitle: "Personal Expense Tracker",
-    type: "Desktop app",
+    category: "Desktop Application",
     description:
-      "A Java desktop application for managing personal expenses, built with Swing and object-oriented programming.",
-    features: [
-      "Personal expense management",
-      "Desktop GUI built with Java Swing",
-      "Object-oriented design",
-    ],
-    tech: ["Java", "Swing", "OOP"],
-    github: "",
-    demo: "",
-    image: "",
-    visual: "mysphere", icon: "wallet",
-    accent: "blue",
+      "A desktop application for managing personal expenses, built with Java Swing and object-oriented programming.",
+    features: ["Personal expense management", "Java Swing graphical interface", "Object-oriented architecture"],
+    tech: ["Java", "Java Swing", "OOP"],
+    accent: "#36A9FF",
+    imageNote: "Illustration — not a screenshot",
+    image: "assets/projects/mysphere.svg",
+    imageAlt: "Illustrated dashboard for MySphere with charts",
+    links: { github: "", demo: "" },
+    featured: false,
   },
   {
     title: "PACT",
     subtitle: "Program & Accountability Console Tracker",
-    type: "Console app",
+    category: "Console Application",
     description:
-      "A C console application for managing users, programs, tasks, deadlines and accountability, using structured records and file-based storage.",
-    features: [
-      "User and program management",
-      "Task and deadline tracking",
-      "Accountability workflow, including subscription and administrator data",
-      "Persistent storage with C file handling",
-    ],
-    tech: ["C", "File Handling", "Console"],
-    github: "",
-    demo: "",
-    image: "",
-    visual: "pact", icon: "checklist",
-    accent: "emerald",
+      "A console application for managing users, programs, tasks, deadlines and accountability, built in C with file handling.",
+    features: ["User management", "Programs and tasks", "Deadlines", "Accountability tracking", "File handling"],
+    tech: ["C", "File Handling"],
+    accent: "#7FD4FF",
+    imageNote: "Illustration — not a screenshot",
+    image: "assets/projects/pact.svg",
+    imageAlt: "Illustrated management console for PACT with users, programs, tasks and deadlines",
+    links: { github: "", demo: "" },
+    featured: false,
   },
   {
     title: "Space Invaders",
     subtitle: "Galactic Warfare: Deluxe Edition",
-    type: "ASCII console game",
+    category: "Console Game · ASCII",
     description:
-      "A real-time ASCII console game in C, using the Windows API for console control. It features enemies, power-ups, boss phases and scoring.",
-    features: [
-      "Enemies, power-ups and boss phases",
-      "Scoring system",
-      "Real-time gameplay loop with keyboard input",
-      "Retro ASCII rendering via the Windows API",
-    ],
-    tech: ["C", "Windows API", "Game Loop"],
-    github: "",
-    demo: "",
-    image: "",
-    visual: "invaders", icon: "invader",
-    accent: "blue",
+      "A real-time ASCII console game for Windows with enemies, power-ups, boss phases and scoring.",
+    features: ["Real-time gameplay", "Enemies and power-ups", "Boss phases", "Scoring system"],
+    tech: ["C", "Windows API"],
+    accent: "#FFB84D",
+    imageNote: "Illustration — not a screenshot",
+    image: "assets/projects/space-invaders.svg",
+    imageAlt: "Retro CRT illustration of the Space Invaders ASCII console game",
+    links: { github: "", demo: "" },
+    featured: false,
   },
 ];

@@ -1,28 +1,45 @@
 /* ============================================================
-   EDUCATION — newest first. Source: CV.
-   Fields: degree, school, period, status ("current" highlights it),
-           details (optional short line), note (optional).
-   To update your semester: edit `semester` in profile.js.
-   ============================================================ */
-window.SITE = window.SITE || {};
+   EDUCATION  —  newest first
+   ------------------------------------------------------------
+   Fields:
+     degree       – name of the qualification
+     institution  – school / college / university
+     period       – text shown on the timeline, e.g. "2025 — Present"
+     current      – true for the one you are studying now (shows a pulse)
+     detail       – optional extra line (e.g. semester, CGPA, focus).
+                    Leave "" to hide.
 
-window.SITE.education = [
+   To update your SEMESTER, edit `currentSemester` in profile.js —
+   it is added to the current entry automatically.
+
+   EXAMPLE of a new entry:
+     {
+       degree: "M.Sc. in Cybersecurity",
+       institution: "Some University",
+       period: "2029 — 2031",
+       detail: "Thesis: ...",
+     },
+   ============================================================ */
+window.PORTFOLIO = window.PORTFOLIO || {};
+
+window.PORTFOLIO.education = [
   {
-    degree: "B.Sc. in Computer Science and Engineering",
-    school: "North South University",
-    period: "2025 – Present",
-    status: "current",
-    details: "Building a foundation in programming, data structures, algorithms and computer systems.",
-    useSemester: true,                  // shows profile.semester on this entry if set
+    degree: "B.Sc. in Computer Science & Engineering",
+    institution: "North South University",
+    period: "2025 — Present",
+    current: true,
+    detail: "",
   },
   {
     degree: "Higher Secondary Certificate (HSC)",
-    school: "Govt. Science College",
+    institution: "Govt. Science College",
     period: "2024",
+    detail: "",
   },
   {
     degree: "Secondary School Certificate (SSC)",
-    school: "Ideal School and College",
+    institution: "Ideal School and College",
     period: "2022",
+    detail: "",
   },
 ];

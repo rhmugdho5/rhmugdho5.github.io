@@ -1,355 +1,588 @@
-/* Renders the whole site from the files in /data. You normally never edit this file. */
-(() => {
+/* ==========================================================
+   Rejoan Hasan Mugdho — Portfolio
+   Renders the whole page from the files in /data and wires up
+   the interactions. You normally never need to edit this file.
+   ========================================================== */
+(function () {
   "use strict";
-  const S = window.SITE || {};
-  const P = S.profile || {};
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const safeUrl = u => (/^(https?:\/\/|mailto:|tel:|assets\/|\.\/)/i.test(u || "") ? u : "");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* ---------- icons ---------- */
-  const IC = {
-    arrow: '<path d="M7 17 17 7M8 7h9v9"/>', download: '<path d="M12 3v12m0 0-4-4m4 4 4-4M4 20h16"/>',
-    mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
-    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
-    code: '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>',
-    brain: '<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
-    tool: '<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 8v8M18 10c0 4-6 3-12 6"/>',
-    layers: '<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
-    terminal: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/>',
-    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
-    moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>',
-    wallet: '<path d="M4 7a2 2 0 0 1 2-2h12v4M4 7v10a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><circle cx="16" cy="14" r="1"/>',
-    checklist: '<path d="m4 6 2 2 3-3M4 14l2 2 3-3M12 7h8M12 15h8"/>',
-    invader: '<path d="M8 4v2M16 4v2M7 6h10v2h3v6h-2v3h-3v-2H9v2H6v-3H4V8h3zM9 10h2v2H9zM13 10h2v2h-2z"/>',
-    shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
-    graduation: '<path d="m2 9 10-5 10 5-10 5zM6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
-    github: "M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"
+  const P = window.PORTFOLIO || {};
+  const profile = P.profile || {};
+  const social = P.social || { profiles: [] };
+  const education = P.education || [];
+  const skills = P.skills || [];
+  const skillStatuses = P.skillStatuses || {};
+  const learning = P.learning || { nodes: [] };
+  const projects = P.projects || [];
+  const certs = P.certifications || [];
+  const achievements = P.achievements || [];
+
+  const reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const finePointer = !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+
+  /* ---------- helpers ---------- */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  /* Only allow safe URL schemes + relative paths. */
+  function url(u) {
+    u = String(u || "").trim();
+    if (!u || /^\s*javascript:/i.test(u)) return "";
+    return /^(https?:|mailto:|tel:|#|\.{0,2}\/|[\w-]+[\/.])/i.test(u) ? u : "";
+  }
+  const icon = (n) => '<svg class="i" aria-hidden="true"><use href="#i-' + esc(n) + '"/></svg>';
+  const ext = (h) => (/^https?:/i.test(h) ? ' target="_blank" rel="noopener noreferrer"' : "");
+  const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; return el; };
+  const initials = (s) => String(s || "").split(/\s+/).filter((w) => /[A-Za-z]/.test(w)).map((w) => w[0].toUpperCase()).join("");
+  const colour = (c) => (/^#[0-9a-f]{3,8}$/i.test(String(c || "")) ? c : "");
+
+  /* ---------- simple text bindings: <span data-bind="key"> ---------- */
+  const nameParts = String(profile.name || "").trim().split(/\s+/);
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+  const firstLast = nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : profile.name || "";
+  const about = profile.about || {};
+  const contact = profile.contact || {};
+  const bindings = {
+    university: profile.university, universityShort: profile.universityShort, department: profile.department,
+    designation: profile.designation, tagline: profile.tagline, intro: profile.intro, status: profile.status,
+    primaryInterest: profile.primaryInterest, name: profile.name, firstLast, lastName,
+    typingFirst: (profile.typing && profile.typing[0]) || "",
+    aboutHeading: about.heading, contactHeading: contact.heading, contactText: contact.text, footerNote: profile.footerNote,
   };
-  const svg = (k, cls = "") => k === "github"
-    ? `<svg class="i fill ${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${IC.github}"/></svg>`
-    : `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k] || IC.code}</svg>`;
-  const MONO = { linkedin: "in", leetcode: "LC", codeforces: "CF", atcoder: "AC" };
-  const brand = k => k === "github" ? svg("github") : `<span class="badge" aria-hidden="true">${MONO[k] || esc(k.slice(0, 2))}</span>`;
+  $$("[data-bind]").forEach((el) => {
+    const v = bindings[el.getAttribute("data-bind")];
+    if (v !== undefined && v !== "") el.textContent = v;
+  });
+  const yearEl = $("#year"); if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------- bindings ---------- */
-  const get = path => path.split(".").reduce((o, k) => (o == null ? o : o[k]), S);
-  $$("[data-text]").forEach(el => { el.textContent = get(el.dataset.text) ?? ""; });
-  $$("[data-icon]").forEach(el => { el.outerHTML = svg(el.dataset.icon); });
-  $("#year").textContent = new Date().getFullYear();
-  const mail = `mailto:${P.email}?subject=${encodeURIComponent(P.emailSubject || "")}`;
-  const slug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-
-  /* ---------- hero ---------- */
-  const parts = (P.tagline || "").split(/(?<=\.)\s+/);
-  $("#tagline").innerHTML = esc(parts[0] || "") + (parts[1] ? ` <span>${esc(parts.slice(1).join(" "))}</span>` : "");
-  $("#heroAvail").textContent = [P.availability, P.location].filter(Boolean).join(" · ");
-  const photo = $("#photo"); photo.src = P.photo; photo.alt = P.photoAlt || P.name;
-  const uniLine = [P.university, P.semester].filter(Boolean).join(" · ");
-  $("#panelRows").innerHTML = [...(P.heroPanel || []), { k: "university", v: uniLine }].filter(r => r.v)
-    .map(r => `<div><dt>${esc(r.k)}</dt><dd>${esc(r.v)}</dd></div>`).join("");
-  $("#labUni").textContent = [P.department && "CSE", P.university && "NSU"].filter(Boolean).join(" · ");
-  const cv = $("#cvBtn"); cv.href = P.cv; cv.setAttribute("download", P.cvDownloadName || "");
-  $("#mailBtn").href = mail;
-  $("#heroSocial").innerHTML = (S.social || []).filter(s => s.showInHero && safeUrl(s.url))
-    .map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(s.name)} (opens in new tab)">${brand(s.icon)}${esc(s.name)}</a>`).join("");
-  $("#brandMark").textContent = ((P.firstName || P.name || "R")[0] + (P.lastName || "M")[0]).toUpperCase();
-  if (reduce) $$("#portrait animateMotion").forEach(a => a.remove());
-
-  const typed = $("#typed"), words = P.typingPhrases || [];
-  if (typed && words.length) {
-    if (reduce || words.length === 1) typed.textContent = words[0];
-    else {
-      let w = 0, c = 0, del = false;
-      const tick = () => {
-        const word = words[w]; typed.textContent = word.slice(0, c);
-        if (!del && c === word.length) { del = true; return setTimeout(tick, 1800); }
-        if (del && c === 0) { del = false; w = (w + 1) % words.length; return setTimeout(tick, 320); }
-        c += del ? -1 : 1; setTimeout(tick, del ? 26 : 58);
-      };
-      tick();
+  /* ---------- CV links + photo ---------- */
+  const cv = profile.cv || {};
+  $$("[data-cv]").forEach((a) => {
+    if (cv.file) a.setAttribute("href", cv.file);
+    if (cv.downloadName) a.setAttribute("download", cv.downloadName);
+  });
+  const ph = profile.photo;
+  if (ph) {
+    const img = $("#heroPhoto"), src = $("#heroSrcSmall");
+    if (img) {
+      if (ph.jpg) img.src = ph.jpg;
+      if (ph.alt) img.alt = ph.alt;
+      if (ph.width) img.width = ph.width;
+      if (ph.height) img.height = ph.height;
     }
+    if (src && ph.webp) src.srcset = (ph.small && ph.small.webp ? ph.small.webp + " 480w, " : "") + ph.webp + " 960w";
   }
 
-  /* ---------- hero network canvas (pauses off-screen / hidden tab) ---------- */
-  (() => {
-    const cv = $("#net"); if (!cv || !cv.getContext) return;
-    const ctx = cv.getContext("2d"), hero = $("#home");
-    let W = 0, H = 0, nodes = [], pk = [], raf = 0, vis = true, mx = -999, my = -999, f = 0;
-    const D = 135;
-    const size = () => {
-      const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 1.5);
-      W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.round(Math.min(64, Math.max(24, W * H / 20000)));
-      nodes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .28, vy: (Math.random() - .5) * .28, r: Math.random() * 1.3 + .8, b: Math.random() < .28 }));
-      pk = [];
-    };
-    const draw = move => {
-      ctx.clearRect(0, 0, W, H);
-      for (const n of nodes) {
-        if (move) { n.x += n.vx; n.y += n.vy; if (n.x < -10) n.x = W + 10; else if (n.x > W + 10) n.x = -10; if (n.y < -10) n.y = H + 10; else if (n.y > H + 10) n.y = -10; }
+  /* ---------- hero: social buttons + status panel ---------- */
+  set("heroSocial", (social.profiles || []).filter((p) => p.hero && url(p.url)).map((p) =>
+    '<li><a href="' + esc(url(p.url)) + '"' + ext(url(p.url)) + ' aria-label="' + esc(p.label) + '">' + icon(p.icon) + esc(p.label) + "</a></li>").join(""));
+
+  (function () {
+    let rows = (profile.statusPanel || []).slice();
+    if (profile.currentSemester) rows.splice(1, 0, { label: "SEMESTER", value: profile.currentSemester });
+    set("statusPanel", rows.map((r) => '<div><dt>' + esc(r.label) + '</dt><dd' + (/focus/i.test(r.label) ? ' class="em"' : "") + ">" + esc(r.value) + "</dd></div>").join(""));
+  })();
+
+  /* ---------- about (bento) ---------- */
+  (function () {
+    const codingCount = (social.profiles || []).filter((p) => p.badge).length;
+    const paras = (about.paragraphs || []).map((t) => "<p>" + esc(t) + "</p>").join("");
+    const focus = (about.focusNow || []).map((t) => "<li>" + esc(t) + "</li>").join("");
+    const langs = (about.languages || []).map((l) => '<div class="lang"><b>' + esc(l.name) + "</b><span>" + esc(l.level) + "</span></div>").join("");
+    const tl = profile.terminal || [];
+    const term = tl.map((l, i) => {
+      const cmd = /^\$\s/.test(l);
+      return '<span class="term-line ' + (cmd ? "cmd" : "out") + '" style="--i:' + i + '">' + esc(cmd ? l.replace(/^\$\s/, "") : l) + "</span>";
+    }).join("") + '<span class="term-line cursor-line" style="--i:' + tl.length + '"></span>';
+    set("aboutBento",
+      '<article class="card b-bio reveal"><h3>Introduction</h3>' + paras + "</article>" +
+      (tl.length ? '<article class="card b-term reveal" style="--d:.08s" aria-label="Terminal summary"><div class="term-bar"><i></i><i></i><i></i><span>rhm@portfolio: ~</span></div><div class="term-body">' + term + "</div></article>" : "") +
+      '<article class="card b-focus reveal"><h3>Currently strengthening</h3><ul class="checklist">' + focus + "</ul></article>" +
+      '<article class="card b-stats reveal" style="--d:.08s">' +
+        '<div class="stat"><b data-count="' + projects.length + '">0</b><span>Featured projects</span></div>' +
+        '<div class="stat"><b data-count="' + certs.length + '">0</b><span>Courses &amp; certificates</span></div>' +
+        '<div class="stat"><b data-count="' + codingCount + '">0</b><span>Coding platforms</span></div></article>' +
+      '<article class="card b-lang reveal"><h3>Languages</h3>' + langs + "</article>");
+  })();
+
+  /* ---------- journey: education ---------- */
+  set("eduTimeline", education.map((e, i) => {
+    let detail = e.detail || "";
+    if (e.current && profile.currentSemester) detail = profile.currentSemester + (detail ? " · " + detail : "");
+    return '<li class="tl-item' + (e.current ? " current" : "") + ' reveal" style="--d:' + i * 0.08 + 's"><span class="tl-dot" aria-hidden="true"></span><div class="card tl-card">' +
+      '<span class="tl-period">' + esc(e.period) + "</span>" +
+      "<h4>" + esc(e.degree) + (e.current ? '<span class="badge">In progress</span>' : "") + "</h4>" +
+      "<p>" + esc(e.institution) + "</p>" + (detail ? '<p style="margin-top:.3rem">' + esc(detail) + "</p>" : "") + "</div></li>";
+  }).join(""));
+  const jl = $("#journeyLead"); if (jl && learning.intro) jl.textContent = learning.intro;
+
+  /* ---------- journey: learning map (interactive SVG network) ---------- */
+  (function () {
+    const root = $("#learnMap");
+    const nodes = learning.nodes || [];
+    if (!root || !nodes.length) return;
+    const statusLabel = learning.statuses || {};
+    const byId = {}; nodes.forEach((n) => (byId[n.id] = n));
+    const centerNode = nodes.find((n) => n.center) || nodes[0];
+    const outer = nodes.filter((n) => n !== centerNode);
+    let selected = centerNode.id;
+    const mq = window.matchMedia("(max-width: 700px)");
+
+    function wrap(label, max) {
+      const words = String(label).split(" "), lines = [];
+      let cur = "";
+      words.forEach((w) => {
+        if ((cur + " " + w).trim().length > max && cur) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim();
+      });
+      if (cur) lines.push(cur);
+      return lines;
+    }
+    function layout() {
+      const m = mq.matches;
+      const W = m ? 360 : 640, H = m ? 560 : 430, cx = W / 2, cy = H / 2, rx = m ? 112 : 235, ry = m ? 200 : 140;
+      const pos = {};
+      pos[centerNode.id] = { x: cx, y: cy };
+      outer.forEach((n, i) => {
+        const a = (-90 + (360 / outer.length) * i) * Math.PI / 180;
+        pos[n.id] = { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a) };
+      });
+      return { W, H, pos, max: m ? 13 : 16 };
+    }
+    function draw() {
+      const L = layout(), seen = {}, edges = [];
+      nodes.forEach((n) => (n.links || []).forEach((t) => {
+        if (!byId[t]) return;
+        const k = [n.id, t].sort().join("|");
+        if (seen[k]) return; seen[k] = 1;
+        edges.push('<line class="l-edge" data-a="' + esc(n.id) + '" data-b="' + esc(t) + '" x1="' + L.pos[n.id].x.toFixed(1) + '" y1="' + L.pos[n.id].y.toFixed(1) + '" x2="' + L.pos[t].x.toFixed(1) + '" y2="' + L.pos[t].y.toFixed(1) + '"/>');
+      }));
+      const ns = nodes.map((n) => {
+        const p = L.pos[n.id], c = n === centerNode, r = c ? 14 : 9, lines = wrap(n.label, L.max);
+        const above = p.y < L.H / 2 - 2 || (c ? false : false);
+        const base = c ? p.y + r + 22 : above ? p.y - r - 12 - (lines.length - 1) * 16 : p.y + r + 20;
+        const tsp = lines.map((ln, i) => '<tspan x="' + p.x.toFixed(1) + '" y="' + (base + i * 16).toFixed(1) + '">' + esc(ln) + "</tspan>").join("");
+        const lastY = base + (lines.length - 1) * 16 + 6, firstY = base - 14;
+        const top = Math.min(p.y - r - 8, firstY), bot = Math.max(p.y + r + 8, lastY);
+        return '<g class="l-node ' + esc(n.status) + (c ? " center" : "") + '" data-id="' + esc(n.id) + '" tabindex="0" role="button" aria-label="' + esc(n.label) + ", " + esc(statusLabel[n.status] || n.status) + '">' +
+          '<rect class="hit" x="' + (p.x - 62).toFixed(1) + '" y="' + top.toFixed(1) + '" width="124" height="' + (bot - top).toFixed(1) + '" rx="10"/>' +
+          '<circle class="ring" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (r + 8) + '"/><circle class="core" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + r + '"/><text>' + tsp + "</text></g>";
+      }).join("");
+      const legend = Object.keys(statusLabel).map((k) => {
+        const css = k === "hands-on" ? "background:var(--em)" : k === "learning" ? "background:var(--blue)" : "border:1.5px solid var(--muted)";
+        return '<span><i style="' + css + '"></i>' + esc(statusLabel[k]) + "</span>";
+      }).join("");
+      root.innerHTML = '<svg class="learn-svg" viewBox="0 0 ' + L.W + " " + L.H + '" role="group" aria-label="Interactive map of my learning focus areas">' + edges.join("") + ns + "</svg>" +
+        '<div class="learn-detail" id="learnDetail" aria-live="polite"></div><div class="learn-legend">' + legend + "<span>Select a node to read more</span></div>";
+      select(selected, true);
+    }
+    function select(id, quiet) {
+      const n = byId[id]; if (!n) return;
+      selected = id;
+      $$(".l-node", root).forEach((g) => g.classList.toggle("sel", g.getAttribute("data-id") === id));
+      $$(".l-edge", root).forEach((e) => e.classList.toggle("on", e.getAttribute("data-a") === id || e.getAttribute("data-b") === id));
+      const rel = (n.links || []).filter((t) => byId[t]).concat(nodes.filter((o) => (o.links || []).indexOf(id) > -1 && (n.links || []).indexOf(o.id) < 0).map((o) => o.id));
+      $("#learnDetail", root).innerHTML =
+        '<div class="ld-top"><h4>' + esc(n.label) + '</h4><span class="st-chip ' + esc(n.status) + '">' + esc(statusLabel[n.status] || n.status) + "</span></div><p>" + esc(n.text) + "</p>" +
+        (rel.length ? '<div class="ld-links"><small>Connected to</small>' + rel.map((t) => '<button type="button" data-go="' + esc(t) + '">' + esc(byId[t].label) + "</button>").join("") + "</div>" : "");
+    }
+    root.addEventListener("click", (e) => {
+      const g = e.target.closest(".l-node"), b = e.target.closest("[data-go]");
+      if (g) select(g.getAttribute("data-id")); else if (b) select(b.getAttribute("data-go"));
+    });
+    root.addEventListener("keydown", (e) => {
+      const g = e.target.closest && e.target.closest(".l-node");
+      if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(g.getAttribute("data-id")); }
+    });
+    (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(draw);
+    draw();
+  })();
+
+  /* ---------- skills: capability map ---------- */
+  (function () {
+    const root = $("#skillsMap");
+    if (!root || !skills.length) return;
+    let cur = 0;
+    const used = {};
+    skills.forEach((g) => (g.items || []).forEach((it) => { if (typeof it === "object") used[it.status] = 1; }));
+    const legend = Object.keys(skillStatuses).filter((k) => used[k]).map((k) => '<span><span class="st-chip ' + esc(k) + '">' + esc(skillStatuses[k].label) + "</span></span>").join("");
+
+    root.innerHTML =
+      '<div class="skill-tabs" role="tablist" aria-label="Skill categories" aria-orientation="vertical">' +
+      skills.map((g, i) => '<button class="skill-tab" role="tab" type="button" id="stab' + i + '" aria-controls="spanel" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '" data-i="' + i + '"><span class="skill-ico">' + icon(g.icon || "code") + '</span><span class="t">' + esc(g.title) + "</span><em>" + (g.items || []).length + "</em></button>").join("") +
+      '</div><div class="skill-panel" id="spanel" role="tabpanel" aria-live="polite"></div>';
+
+    const panel = $("#spanel", root);
+    function show(i, focus) {
+      cur = i;
+      const g = skills[i];
+      $$(".skill-tab", root).forEach((b, k) => { b.setAttribute("aria-selected", k === i); b.tabIndex = k === i ? 0 : -1; if (k === i && focus) b.focus(); });
+      panel.setAttribute("aria-labelledby", "stab" + i);
+      panel.innerHTML =
+        '<div class="sp-head"><h4>' + esc(g.title) + "</h4>" + (g.blurb ? "<p>" + esc(g.blurb) + "</p>" : "") + "</div>" +
+        '<ul class="sp-grid">' + (g.items || []).map((it, k) => {
+          const o = typeof it === "string" ? { name: it, status: "skill" } : it;
+          const st = skillStatuses[o.status] ? o.status : "skill";
+          return '<li class="sk st-' + esc(st) + '" style="--i:' + k + '"><b>' + esc(o.name) + "</b>" + (o.note ? "<small>" + esc(o.note) + "</small>" : "") + '<span class="st-chip ' + esc(st) + '">' + esc((skillStatuses[st] || {}).label || st) + "</span></li>";
+        }).join("") + '</ul><div class="sk-legend">' + legend + "</div>";
+    }
+    root.addEventListener("click", (e) => { const b = e.target.closest(".skill-tab"); if (b) show(+b.getAttribute("data-i")); });
+    root.addEventListener("keydown", (e) => {
+      if (!e.target.closest(".skill-tab")) return;
+      const k = e.key; let n = cur;
+      if (k === "ArrowDown" || k === "ArrowRight") n = (cur + 1) % skills.length;
+      else if (k === "ArrowUp" || k === "ArrowLeft") n = (cur - 1 + skills.length) % skills.length;
+      else if (k === "Home") n = 0; else if (k === "End") n = skills.length - 1; else return;
+      e.preventDefault(); show(n, true);
+    });
+    show(0);
+  })();
+
+  set("interests", "<h3>Areas of interest</h3>" + '<ul class="tags">' + (profile.interests || []).map((t) => '<li class="tag' + (t.primary ? " primary" : "") + '">' + esc(t.name) + "</li>").join("") + "</ul>");
+
+  /* ---------- projects ---------- */
+  set("projectsGrid", projects.map((p, i) => {
+    const gh = url(p.links && p.links.github), demo = url(p.links && p.links.demo), imgSrc = url(p.image), ac = colour(p.accent);
+    const links = (gh ? '<a href="' + esc(gh) + '"' + ext(gh) + ' aria-label="' + esc(p.title) + ' source code on GitHub">' + icon("github") + "Source code</a>" : "") +
+                  (demo ? '<a href="' + esc(demo) + '"' + ext(demo) + ' aria-label="' + esc(p.title) + ' live demo">' + icon("arrow-up-right") + "Live demo</a>" : "");
+    return '<article class="proj" style="' + (ac ? "--accent:" + ac : "") + '">' +
+      '<div class="p-media reveal"><div class="p-frame">' + (imgSrc ? '<img src="' + esc(imgSrc) + '" alt="' + esc(p.imageAlt || p.title + " preview") + '" width="1000" height="640" loading="lazy" decoding="async">' : "") +
+      (p.imageNote ? '<span class="p-note">' + esc(p.imageNote) + "</span>" : "") + "</div></div>" +
+      '<div class="p-body reveal" style="--d:.1s"><p class="p-idx">' + String(i + 1).padStart(2, "0") + (p.category ? '<span class="p-cat">' + esc(p.category) + "</span>" : "") + "</p>" +
+      "<h3>" + esc(p.title) + "</h3>" + (p.subtitle ? '<p class="p-sub">' + esc(p.subtitle) + "</p>" : "") +
+      '<p class="p-desc">' + esc(p.description) + "</p>" +
+      ((p.features || []).length ? '<ul class="feat">' + p.features.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" : "") +
+      '<ul class="p-tech" aria-label="Technologies">' + (p.tech || []).map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>" +
+      '<div class="p-links">' + links + "</div></div></article>";
+  }).join(""));
+
+  /* subtle 3D tilt on project previews (mouse only) */
+  if (finePointer && !reduceMotion) {
+    $$(".p-media").forEach((m) => {
+      const f = $(".p-frame", m);
+      m.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse") return;
+        const r = m.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        f.style.setProperty("--rx", (-y * 5).toFixed(2) + "deg"); f.style.setProperty("--ry", (x * 6).toFixed(2) + "deg");
+      });
+      m.addEventListener("pointerleave", () => { f.style.setProperty("--rx", "0deg"); f.style.setProperty("--ry", "0deg"); });
+    });
+  }
+
+  /* ---------- credentials wall (expandable) ---------- */
+  const TYPES = {
+    certification: { label: "Certification", plural: "Certifications", icon: "cert", org: "Issuer" },
+    recognition: { label: "Recognition", plural: "Recognition", icon: "award", org: "Awarded by" },
+    competition: { label: "Competition", plural: "Competitions", icon: "flag", org: "Organizer" },
+  };
+  const creds = []
+    .concat(certs.map((c) => Object.assign({ type: "certification" }, c)))
+    .concat(achievements.map((a) => Object.assign({}, a)))
+    .filter((c) => TYPES[c.type]);
+
+  function credCard(c, i) {
+    const t = TYPES[c.type], u = url(c.url), id = "cred" + i;
+    const rows =
+      (c.details ? "<div><dt>About</dt><dd>" + esc(c.details) + "</dd></div>" : "") +
+      (c.issuer ? "<div><dt>" + t.org + "</dt><dd>" + esc(c.issuer) + "</dd></div>" : "") +
+      "<div><dt>Type</dt><dd>" + t.label + (c.category ? " · " + esc(c.category) : "") + "</dd></div>" +
+      "<div><dt>Date</dt><dd" + (c.date ? ">" + esc(c.date) : ' class="muted">Not listed') + "</dd></div>" +
+      (c.note ? "<div><dt>Note</dt><dd>" + esc(c.note) + "</dd></div>" : "") +
+      ((c.topics || []).length ? '<div><dt>Topics</dt><dd><ul class="tags">' + c.topics.map((x) => '<li class="tag">' + esc(x) + "</li>").join("") + "</ul></dd></div>" : "") +
+      (u ? '<div><dt>Verify</dt><dd><a href="' + esc(u) + '"' + ext(u) + ">View credential " + icon("arrow-up-right") + "</a></dd></div>" : "");
+    return '<article class="card cred' + (c.featured ? " featured" : "") + '" data-type="' + c.type + '">' +
+      '<button class="cred-toggle" type="button" aria-expanded="false" aria-controls="' + id + '"><span class="cred-top"><span class="cred-ico">' + icon(t.icon) + '</span><span class="cred-right"><span class="cred-type">' + t.label + '</span><span class="cred-plus">' + icon("plus") + "</span></span></span>" +
+      "<h4>" + esc(c.title) + "</h4>" + (c.issuer ? '<span class="issuer">' + esc(c.issuer) + "</span>" : "") + "</button>" +
+      '<div class="cred-more" id="' + id + '" role="region" aria-label="' + esc(c.title) + ' details"><div><dl>' + rows + "</dl></div></div></article>";
+  }
+  let activeFilter = "all";
+  function renderCreds() {
+    set("credGrid", creds.filter((c) => activeFilter === "all" || c.type === activeFilter).map(credCard).join(""));
+  }
+  (function () {
+    const bar = $("#credFilters"), grid = $("#credGrid");
+    if (!bar || !grid) return;
+    const keys = ["all"].concat(Object.keys(TYPES).filter((k) => creds.some((c) => c.type === k)));
+    bar.innerHTML = keys.map((k) => {
+      const n = k === "all" ? creds.length : creds.filter((c) => c.type === k).length;
+      return '<button class="filter" type="button" data-f="' + k + '" aria-pressed="' + (k === "all") + '">' + (k === "all" ? "All" : TYPES[k].plural) + "<span>" + n + "</span></button>";
+    }).join("");
+    bar.addEventListener("click", (e) => {
+      const b = e.target.closest(".filter"); if (!b) return;
+      activeFilter = b.getAttribute("data-f");
+      $$(".filter", bar).forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+      renderCreds();
+    });
+    grid.addEventListener("click", (e) => {
+      const b = e.target.closest(".cred-toggle"); if (!b) return;
+      const card = b.closest(".cred"), open = !card.classList.contains("open");
+      card.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
+    });
+    renderCreds();
+  })();
+
+  /* ---------- coding / social profiles ---------- */
+  set("profilesGrid", (social.profiles || []).filter((p) => url(p.url)).map((p, i) => {
+    const ico = p.badge ? '<span class="pf-ico" aria-hidden="true">' + esc(p.badge) + "</span>" : '<span class="pf-ico">' + icon(p.icon) + "</span>";
+    return '<a class="card profile reveal" id="pf-' + esc(p.id) + '" href="' + esc(url(p.url)) + '"' + ext(url(p.url)) + ' style="--d:' + (i % 3) * 0.07 + 's" aria-label="' + esc(p.label) + ", " + esc(p.handle) + '">' +
+      '<div class="pf-top">' + ico + '<span class="pf-arrow">' + icon("arrow-up-right") + "</span></div>" +
+      "<h3>" + esc(p.label) + '</h3><p class="pf-handle">' + esc(p.handle) + "</p>" +
+      '<p class="pf-desc">' + esc(p.description) + '</p><p class="pf-stats" aria-live="polite"></p></a>';
+  }).join(""));
+
+  /* ---------- contact ---------- */
+  (function () {
+    const email = profile.email || "";
+    const subj = profile.emailSubject ? "?subject=" + encodeURIComponent(profile.emailSubject) : "";
+    const cta = $("#emailCta");
+    if (cta && email) cta.setAttribute("href", "mailto:" + email + subj);
+    const items = [];
+    if (email) items.push({ l: "Email", i: "mail", t: email, h: "mailto:" + email + subj });
+    if (profile.phone) items.push({ l: "Phone", i: "phone", t: profile.phone, h: "tel:" + (profile.phoneLink || profile.phone.replace(/\s+/g, "")) });
+    (social.profiles || []).filter((p) => p.id === "linkedin" || p.id === "github").forEach((p) => items.push({ l: p.label, i: p.icon, t: p.handle, h: p.url }));
+    set("contactList", items.map((c) => '<li><a href="' + esc(url(c.h)) + '"' + ext(url(c.h)) + "><small>" + icon(c.i) + esc(c.l) + "</small><span>" + esc(c.t) + "</span></a></li>").join(""));
+    const btn = $("#copyEmail");
+    if (btn) btn.addEventListener("click", () => {
+      const label = $("span", btn), old = label.textContent;
+      const done = (ok) => { label.textContent = ok ? "Copied!" : email; setTimeout(() => (label.textContent = old), 2200); };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(email).then(() => done(true), () => done(false));
+      else {
+        const ta = document.createElement("textarea"); ta.value = email; ta.setAttribute("readonly", "");
+        ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select();
+        let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta); done(ok);
       }
+    });
+  })();
+
+  /* ---------- typing animation ---------- */
+  (function () {
+    const el = $("#typed"), words = profile.typing || [];
+    if (!el || words.length < 2 || reduceMotion) { const c = $(".caret"); if (c && reduceMotion) c.style.display = "none"; return; }
+    let w = 0, n = words[0].length, deleting = true;
+    function tick() {
+      const word = words[w]; let delay = deleting ? 28 : 62;
+      el.textContent = word.slice(0, n);
+      if (!deleting && n === word.length) { deleting = true; delay = 1800; n -= 1; }
+      else if (deleting && n === 0) { deleting = false; w = (w + 1) % words.length; delay = 280; n = 1; }
+      else n += deleting ? -1 : 1;
+      setTimeout(tick, delay);
+    }
+    setTimeout(tick, 2400);
+  })();
+
+  /* ---------- header, progress, active link, hero scroll-parallax ---------- */
+  const header = $("#siteHeader"), bar = $("#progressBar"), heroBg = $(".hero-bg"), heroEl = $("#top");
+  let ticking = false;
+  function onScroll() {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    if (bar) bar.style.transform = "scaleX(" + (h > 0 ? Math.min(1, y / h) : 0) + ")";
+    if (header) header.classList.toggle("scrolled", y > 12);
+    if (heroBg && !reduceMotion && y < window.innerHeight * 1.2) heroBg.style.transform = "translate3d(0," + (y * 0.12).toFixed(1) + "px,0)";
+    ticking = false;
+  }
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  onScroll();
+
+  const links = $$("#navLinks a");
+  if ("IntersectionObserver" in window) {
+    const secObs = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const clear = en.target.id === "top";
+        links.forEach((a) => {
+          const on = !clear && a.getAttribute("href") === "#" + en.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+        });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    links.forEach((a) => { const s = $(a.getAttribute("href")); if (s) secObs.observe(s); });
+    if (heroEl) secObs.observe(heroEl);
+  }
+
+  /* ---------- mobile nav ---------- */
+  const toggle = $("#navToggle"), menu = $("#navMenu");
+  function setMenu(open) {
+    if (!toggle || !menu) return;
+    menu.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+  if (toggle) {
+    toggle.addEventListener("click", () => setMenu(toggle.getAttribute("aria-expanded") !== "true"));
+    menu.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { setMenu(false); toggle.focus(); } });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".nav")) setMenu(false); });
+    window.addEventListener("resize", () => { if (window.innerWidth > 880) setMenu(false); });
+  }
+
+  /* ---------- scroll reveal + count-up ---------- */
+  function countUp(el) {
+    const target = +el.getAttribute("data-count") || 0;
+    if (reduceMotion || target === 0) { el.textContent = target; return; }
+    const t0 = performance.now(), dur = 1100;
+    (function step(t) {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  const reveals = $$(".reveal:not(.in)"), counters = $$("[data-count]");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const rObs = new IntersectionObserver((entries, o) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); o.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    reveals.forEach((el) => rObs.observe(el));
+    const cObs = new IntersectionObserver((entries, o) => {
+      entries.forEach((en) => { if (en.isIntersecting) { countUp(en.target); o.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => cObs.observe(el));
+    setTimeout(() => $$(".reveal:not(.in)").forEach((el) => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("in"); }), 1200);
+  } else {
+    reveals.forEach((el) => el.classList.add("in"));
+    counters.forEach(countUp);
+  }
+
+  /* ---------- card spotlight, custom cursor, hero pointer parallax (one shared loop) ---------- */
+  const cursor = $("#cursor");
+  const useCursor = finePointer && !reduceMotion && !!cursor;
+  if (useCursor) document.documentElement.classList.add("has-cursor");
+  const cur = { x: -100, y: -100, tx: -100, ty: -100 }, par = { x: 0, y: 0, tx: 0, ty: 0 };
+  let looping = false;
+  function frame() {
+    let busy = false;
+    if (useCursor) {
+      cur.x += (cur.tx - cur.x) * 0.22; cur.y += (cur.ty - cur.y) * 0.22;
+      cursor.style.transform = "translate3d(" + cur.x.toFixed(1) + "px," + cur.y.toFixed(1) + "px,0)";
+      if (Math.abs(cur.tx - cur.x) > 0.2 || Math.abs(cur.ty - cur.y) > 0.2) busy = true;
+    }
+    if (heroEl && !reduceMotion) {
+      par.x += (par.tx - par.x) * 0.08; par.y += (par.ty - par.y) * 0.08;
+      heroEl.style.setProperty("--px", par.x.toFixed(3)); heroEl.style.setProperty("--py", par.y.toFixed(3));
+      if (Math.abs(par.tx - par.x) > 0.002 || Math.abs(par.ty - par.y) > 0.002) busy = true;
+    }
+    looping = busy; if (busy) requestAnimationFrame(frame);
+  }
+  const kick = () => { if (!looping) { looping = true; requestAnimationFrame(frame); } };
+  const interactive = "a, button, [role=button], .card, .filter, [tabindex='0'], .p-frame";
+  document.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    if (useCursor) {
+      cur.tx = e.clientX; cur.ty = e.clientY; cursor.classList.remove("hide");
+      cursor.classList.toggle("hover", !!(e.target.closest && e.target.closest(interactive)));
+    }
+    const card = e.target.closest && e.target.closest(".card");
+    if (card) { const r = card.getBoundingClientRect(); card.style.setProperty("--mx", e.clientX - r.left + "px"); card.style.setProperty("--my", e.clientY - r.top + "px"); }
+    if (heroEl && !reduceMotion && e.clientY < heroEl.getBoundingClientRect().bottom) {
+      par.tx = (e.clientX / window.innerWidth - 0.5) * 2; par.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    }
+    kick();
+  }, { passive: true });
+  document.documentElement.addEventListener("mouseleave", () => { if (cursor) cursor.classList.add("hide"); par.tx = par.ty = 0; kick(); });
+
+  /* ---------- animated network background (canvas) ---------- */
+  function NetBg(canvas, o) {
+    if (!canvas || !canvas.getContext) return null;
+    const ctx = canvas.getContext("2d");
+    let w = 0, h = 0, nodes = [], packets = [], pairs = [], visible = true, running = false, last = 0, spawn = 0, pointer = null;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+
+    function seed() {
+      const small = w < 700, n = Math.min(small ? o.maxSmall : o.max, Math.round((w * h) / o.area));
+      nodes = [];
+      for (let i = 0; i < n; i++) nodes.push({ x: rnd(0, w), y: rnd(0, h), vx: rnd(-o.speed, o.speed), vy: rnd(-o.speed, o.speed), r: rnd(1, 2.1), c: i % 4 === 0 ? "0,230,173" : "54,169,255" });
+    }
+    function size() {
+      const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      w = r.width; h = r.height; canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); seed(); draw();
+    }
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      const max = (w < 700 ? o.dist * 0.75 : o.dist), max2 = max * max; pairs = [];
+      ctx.lineWidth = 0.8;
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
         for (let j = i + 1; j < nodes.length; j++) {
-          const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy);
-          if (d < D) { ctx.strokeStyle = `rgba(${a.b || b.b ? "54,169,255" : "0,230,173"},${(1 - d / D) * .34})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+          const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < max2) {
+            const al = (1 - Math.sqrt(d2) / max) * 0.3;
+            ctx.strokeStyle = "rgba(54,169,255," + al.toFixed(3) + ")";
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            if (pairs.length < 200) pairs.push(i, j);
+          }
         }
-        const md = Math.hypot(a.x - mx, a.y - my);
-        if (md < 150) { ctx.strokeStyle = `rgba(234,242,248,${(1 - md / 150) * .28})`; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mx, my); ctx.stroke(); }
-        ctx.fillStyle = a.b ? "rgba(54,169,255,.95)" : "rgba(0,230,173,.95)"; ctx.beginPath(); ctx.arc(a.x, a.y, a.r + .3, 0, 6.283); ctx.fill();
+        if (pointer) {
+          const dx = a.x - pointer.x, dy = a.y - pointer.y, d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 150) { ctx.strokeStyle = "rgba(0,230,173," + ((1 - d / 150) * 0.45).toFixed(3) + ")"; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(pointer.x, pointer.y); ctx.stroke(); }
+        }
       }
-      if (move) {
-        if (f++ % 45 === 0 && pk.length < 5) { for (let t = 0; t < 12; t++) { const a = nodes[Math.random() * nodes.length | 0], b = nodes[Math.random() * nodes.length | 0]; if (a !== b && Math.hypot(a.x - b.x, a.y - b.y) < D) { pk.push({ a, b, t: 0 }); break; } } }
-        pk = pk.filter(p => (p.t += .018) < 1);
-        for (const p of pk) { ctx.fillStyle = "#EAF2F8"; ctx.globalAlpha = .9 * Math.sin(p.t * Math.PI); ctx.beginPath(); ctx.arc(p.a.x + (p.b.x - p.a.x) * p.t, p.a.y + (p.b.y - p.a.y) * p.t, 2, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i]; ctx.fillStyle = "rgba(" + n.c + ",.75)";
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
       }
-    };
-    const loop = () => { draw(true); raf = requestAnimationFrame(loop); };
-    const start = () => { if (!raf && vis && !document.hidden && !reduce) raf = requestAnimationFrame(loop); };
-    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-    size(); draw(false);
-    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); draw(false); }, 200); });
-    if (!reduce) {
-      new IntersectionObserver(e => { vis = e[0].isIntersecting; vis ? start() : stop(); }).observe(hero);
-      document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
-      if (finePointer) { hero.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; }); hero.addEventListener("pointerleave", () => { mx = my = -999; }); }
-      start();
+      for (let k = 0; k < packets.length; k++) {
+        const p = packets[k], a = nodes[p.a], b = nodes[p.b]; if (!a || !b) continue;
+        const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
+        ctx.fillStyle = "rgba(0,230,173,.18)"; ctx.beginPath(); ctx.arc(x, y, 6, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = "rgba(0,230,173,.95)"; ctx.beginPath(); ctx.arc(x, y, 2.2, 0, 6.2832); ctx.fill();
+      }
     }
-  })();
-
-  /* ---------- about ---------- */
-  const counts = [
-    [(S.projects || []).length, "Featured projects"],
-    [((S.skills || [])[0] || { items: [] }).items.length, "Programming languages used"],
-    [(S.certifications || []).length, "Courses & trainings"],
-  ];
-  const term = (P.terminal || []).map((l, i, a) => `<div class="tl ${i === a.length - 1 ? "last" : ""}" style="--d:${i * .28}s"><span class="c">${esc(l.cmd)}</span><span class="o">${esc(l.out)}</span></div>`).join("");
-  $("#aboutGrid").innerHTML =
-    `<article class="card b-about reveal">${(P.about || []).map(t => `<p>${esc(t)}</p>`).join("")}</article>` +
-    `<div class="card b-term reveal" style="--d:.1s"><div class="term" id="term"><div class="term-bar"><i></i><i></i><i></i><span>rhm@portfolio ~</span></div><div class="term-body">${term}</div></div></div>` +
-    counts.map(([n, l], i) => `<div class="card b-stat reveal" style="--d:${i * .08}s"><div class="stat-n count" data-n="${n}">${n}</div><div class="stat-l">${l}</div></div>`).join("") +
-    `<div class="card b-int reveal"><h3>Areas of interest</h3><div class="tags">${(P.interests || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>${P.currentFocus ? `<p class="focus"><b>Currently strengthening:</b> ${esc(P.currentFocus)}</p>` : ""}</div>` +
-    `<div class="card b-lang reveal" style="--d:.1s"><h3>Languages</h3>${(P.languages || []).map(l => `<div class="lang"><b>${esc(l.name)}</b><span>${esc(l.level)}</span></div>`).join("")}</div>`;
-
-  /* ---------- education ---------- */
-  $("#eduList").innerHTML = (S.education || []).map(e => `
-    <li class="t-item reveal ${e.status === "current" ? "current" : ""}"><div class="card">
-      <div class="t-row"><h3>${esc(e.degree)}</h3><span class="t-per">${esc(e.period)}</span></div>
-      <p class="t-school">${esc(e.school)}</p>
-      ${e.details ? `<p class="t-det">${esc(e.details)}</p>` : ""}
-      ${e.useSemester && P.semester ? `<span class="tag t-sem">${esc(P.semester)}</span>` : ""}
-      ${e.note ? `<p class="t-det">${esc(e.note)}</p>` : ""}
-    </div></li>`).join("");
-
-  /* ---------- focus map ---------- */
-  (() => {
-    const J = S.journey; if (!J || !(J.nodes || []).length) { $(".fm") && ($(".fm").hidden = true); return; }
-    const all = [{ id: "core", label: J.center.label, short: J.center.label, status: "primary", text: J.center.text }, ...J.nodes];
-    const SL = J.statusLabels || {};
-    const cx = 280, cy = 170, rx = 150, ry = 118, N = J.nodes.length;
-    const pos = {}; J.nodes.forEach((n, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / N; pos[n.id] = { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a), a }; });
-    const seen = new Set(); let edges = "", pkts = "";
-    J.nodes.forEach((n, i) => {
-      const p = pos[n.id], d = `M${cx},${cy}L${p.x.toFixed(1)},${p.y.toFixed(1)}`;
-      edges += `<path class="fm-e" data-a="core" data-b="${n.id}" d="${d}"/>`;
-      if (!reduce) pkts += `<circle r="2.2" fill="#00E6AD" opacity=".85"><animateMotion dur="${(3.6 + i * .5).toFixed(1)}s" begin="-${(i * .9).toFixed(1)}s" repeatCount="indefinite" path="${d}"/></circle>`;
-      (n.links || []).forEach(id => { const q = pos[id], k = [n.id, id].sort().join(); if (!q || seen.has(k)) return; seen.add(k); edges += `<path class="fm-e" data-a="${n.id}" data-b="${id}" d="M${p.x.toFixed(1)},${p.y.toFixed(1)}L${q.x.toFixed(1)},${q.y.toFixed(1)}"/>`; });
-    });
-    const nodesSvg = J.nodes.map(n => {
-      const p = pos[n.id], c = Math.cos(p.a), s = Math.sin(p.a);
-      const anchor = c > .3 ? "start" : c < -.3 ? "end" : "middle", tx = c > .3 ? 16 : c < -.3 ? -16 : 0, ty = Math.abs(c) <= .3 ? (s > 0 ? 28 : -18) : 4;
-      return `<g class="fm-n" data-id="${n.id}" data-s="${n.status}" transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})"><circle class="h" r="17"/><circle class="d" r="7"/><text x="${tx}" y="${ty}" text-anchor="${anchor}">${esc(n.short || n.label)}</text></g>`;
-    }).join("");
-    $("#fmSvg").innerHTML = `${edges}${pkts}<g class="fm-n fm-core" data-id="core" data-s="primary" transform="translate(${cx} ${cy})"><circle class="halo" r="64"/><circle class="h" r="58" fill="#00E6AD"/><circle class="d" r="50"/><text text-anchor="middle" y="4">${esc(J.center.label)}</text></g>`.replace("</g>", "</g>") + nodesSvg;
-    $("#fmChips").innerHTML = all.map(n => `<button type="button" class="chip" data-id="${n.id}" data-s="${n.status}" aria-pressed="false">${esc(n.label)}</button>`).join("");
-    const pick = id => {
-      const n = all.find(x => x.id === id) || all[0];
-      $$("#fmChips .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.id === n.id));
-      $$("#fmSvg .fm-n").forEach(g => g.classList.toggle("sel", g.dataset.id === n.id));
-      $$("#fmSvg .fm-e").forEach(e => e.classList.toggle("on", e.dataset.a === n.id || e.dataset.b === n.id));
-      const d = $("#fmDetail"); d.dataset.s = n.status;
-      d.innerHTML = `<b>${esc(n.label)}</b><span class="st">${esc(SL[n.status] || n.status)}</span><p>${esc(n.text)}</p>`;
-    };
-    $("#fmChips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) pick(b.dataset.id); });
-    $("#fmSvg").addEventListener("click", e => { const g = e.target.closest(".fm-n"); if (g) pick(g.dataset.id); });
-    pick("core");
-  })();
-
-  /* ---------- skills (capability map) ---------- */
-  (() => {
-    const G = S.skills || [];
-    const nU = G.reduce((a, g) => a + (g.items || []).length, 0), nL = G.reduce((a, g) => a + (g.learning || []).length, 0);
-    $("#skBar").innerHTML = `<div class="seg" role="group" aria-label="Filter skills">${[["all", "All"], ["used", "Used"], ["learning", "Learning"]].map(([k, l], i) => `<button type="button" data-f="${k}" aria-pressed="${i === 0}">${l}</button>`).join("")}</div>
-      <div class="legend"><span><i class="dot"></i>Used in projects or coursework (${nU})</span><span><i class="dot l"></i>Currently learning (${nL})</span></div>`;
-    $("#skillGrid").innerHTML = G.map((g, i) => `
-      <article class="card skill reveal" data-u="${(g.items || []).length}" data-l="${(g.learning || []).length}" style="--d:${(i % 3) * .07}s">
-        <div class="sk-h"><div class="ico">${svg(g.icon || "code")}</div><div><h3>${esc(g.group)}</h3><span class="sk-n">${(g.items || []).length} used · ${(g.learning || []).length} learning</span></div></div>
-        <div class="tags">${(g.items || []).map(t => `<span class="pill u" title="Used">${esc(t)}</span>`).join("")}${(g.learning || []).map(t => `<span class="pill l" title="Currently learning">${esc(t)}</span>`).join("")}</div>
-      </article>`).join("");
-    $("#skBar").addEventListener("click", e => {
-      const b = e.target.closest("button[data-f]"); if (!b) return; const f = b.dataset.f;
-      $$("#skBar button").forEach(x => x.setAttribute("aria-pressed", x === b));
-      $("#skillGrid").dataset.f = f;
-      $$("#skillGrid .skill").forEach(c => c.classList.toggle("dim", (f === "used" && !+c.dataset.u) || (f === "learning" && !+c.dataset.l)));
-    });
-  })();
-
-  /* ---------- project previews (original illustrations, not screenshots) ---------- */
-  const win = (t, body, cls) => `<div class="pv v-${cls}"><div class="wbar"><i></i><i></i><i></i><span>${t}</span></div><div class="wbody">${body}</div><span class="cap">illustrative preview</span></div>`;
-  const star = '<svg class="pat" aria-hidden="true"><defs><pattern id="st" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M23 6l4 10 10-4-4 10 10 4-10 4 4 10-10-4-4 10-4-10-10 4 4-10-10-4 10-4-4-10 10 4z" fill="none" stroke="rgba(0,230,173,.09)"/></pattern></defs><rect width="100%" height="100%" fill="url(#st)"/></svg>';
-  const V = {
-    sirat: p => win("Sirat", `${star}<div class="sb"><div class="it on">${svg("moon")}Salah</div><div class="it">${svg("spark")}Dhikr</div><span class="sk"></span><span class="sk" style="width:70%"></span><span class="sk" style="width:85%"></span></div>
-      <div class="mn"><h4>${svg("moon")}Salah</h4>${["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"].map(n => `<div class="r"><span>${n}</span><span class="sk a"></span></div>`).join("")}</div>`, "sirat"),
-    mysphere: p => win("MySphere", `<div class="kp">${["Expenses", "Categories", "Overview"].map(n => `<div class="k">${n}<span class="sk a"></span></div>`).join("")}</div>
-      <div class="row"><div class="ch">Spending overview<div class="bars">${[48, 72, 38, 85, 58, 66, 44].map(h => `<i style="height:${h}%"></i>`).join("")}</div></div>
-      <div class="dn"><svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke-width="14" transform="rotate(-90 60 60)"><circle cx="60" cy="60" r="44" stroke="rgba(145,164,183,.14)"/><circle cx="60" cy="60" r="44" stroke="#36A9FF" stroke-dasharray="110 276"/><circle cx="60" cy="60" r="44" stroke="#00E6AD" stroke-dasharray="64 276" stroke-dashoffset="-116"/><circle cx="60" cy="60" r="44" stroke="#EAF2F8" stroke-opacity=".6" stroke-dasharray="36 276" stroke-dashoffset="-186"/></g></svg></div></div>`, "mysphere"),
-    pact: p => win("pact ~ console", `<pre><b>PACT</b>  Program &amp; Accountability Tracker
-<i>────────────────────────────</i>
- <b>1</b>  Users
- <b>2</b>  Programs
- <b>3</b>  Tasks
- <b>4</b>  Deadlines
- <b>5</b>  Accountability
-
-<b>&gt;</b> <i>_</i></pre>
-      <div class="tb"><div class="tr h"><span class="sk"></span><span class="sk"></span><span class="sk"></span></div>${["", "b", "m", "", "b"].map((c, i) => `<div class="tr"><span class="sk" style="width:${80 - i * 8}%"></span><span class="sk" style="width:${60 + i * 6}%"></span><i class="st ${c}"></i></div>`).join("")}</div>`, "pact"),
-    invaders: p => `<div class="pv v-inv"><pre aria-hidden="true">${esc(`SCORE ------           BOSS [####--]
-
-   (oo)  (oo)  (oo)  (oo)  (oo)
-   <oo>  <oo>  <oo>  <oo>  <oo>
-   {oo}  {oo}  {oo}  {oo}  {oo}
-
-                  [P]
-          |
-         /_^_\\`).replace("[P]", "<i>[P]</i>").replace("SCORE", "<b>SCORE</b>")}</pre><span class="cap">illustrative preview</span></div>`,
-  };
-
-  /* ---------- projects ---------- */
-  $("#projGrid").innerHTML = (S.projects || []).map((p, i) => {
-    const gh = safeUrl(p.github), demo = safeUrl(p.demo), img = safeUrl(p.image);
-    const ac = p.accent === "blue" ? "54,169,255" : "0,230,173";
-    const pv = img ? `<div class="pv"><img class="shot" src="${esc(img)}" alt="${esc(p.title)} screenshot" loading="lazy"></div>`
-      : V[p.visual] ? V[p.visual](p) : `<div class="pv v-icon"><div class="g">${svg(p.icon || "code")}</div></div>`;
-    return `<article class="card proj reveal" style="--ac:${ac}" id="proj-${slug(p.title)}">
-      <div class="pv-wrap" ${img ? "" : 'aria-hidden="true"'}>${pv}</div>
-      <div class="pi">
-        <div class="p-meta"><b>${String(i + 1).padStart(2, "0")}</b>${p.type ? `<span>${esc(p.type)}</span>` : ""}</div>
-        <h3>${esc(p.title)}</h3><p class="p-sub">${esc(p.subtitle || "")}</p>
-        <p class="p-desc">${esc(p.description)}</p>
-        <ul class="feat">${(p.features || []).map(f => `<li>${esc(f)}</li>`).join("")}</ul>
-        <div class="p-foot"><div class="tags">${(p.tech || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-          <div class="p-links">${gh ? `<a href="${esc(gh)}" target="_blank" rel="noopener noreferrer">${svg("github")}Source code</a>` : ""}${demo ? `<a href="${esc(demo)}" target="_blank" rel="noopener noreferrer">${svg("arrow")}Live demo</a>` : ""}</div></div>
-      </div></article>`;
-  }).join("");
-  $("#projGrid").addEventListener("pointermove", e => { const c = e.target.closest(".proj"); if (!c) return; const r = c.getBoundingClientRect(); c.style.setProperty("--mx", e.clientX - r.left + "px"); c.style.setProperty("--my", e.clientY - r.top + "px"); });
-
-  /* ---------- certifications (expandable) / achievements ---------- */
-  const link = u => safeUrl(u) ? `<a class="v" href="${esc(u)}" target="_blank" rel="noopener noreferrer">Verify credential ↗</a>` : "";
-  $("#certGrid").innerHTML = (S.certifications || []).map((c, i) => `
-    <li class="card cert reveal" style="--d:${(i % 2) * .06}s">
-      <button type="button" class="cert-h" aria-expanded="false" aria-controls="cb${i}"><span><span class="k">${esc(c.type || "Certificate")}</span><b>${esc(c.title)}</b><span class="o">${esc(c.issuer)}</span></span><span class="chev" aria-hidden="true"></span></button>
-      <div class="cert-b" id="cb${i}" role="region"><div><div class="in">${c.details ? `<p>${esc(c.details)}</p>` : ""}<div class="m"><span class="tag">Issuer: ${esc(c.issuer)}</span>${c.date ? `<span class="tag">${esc(c.date)}</span>` : ""}</div>${c.note ? `<p>${esc(c.note)}</p>` : ""}${link(c.url)}</div></div></div></li>`).join("");
-  $("#certGrid").addEventListener("click", e => {
-    const b = e.target.closest(".cert-h"); if (!b) return; const li = b.closest(".cert"), o = !li.classList.contains("open");
-    li.classList.toggle("open", o); b.setAttribute("aria-expanded", o);
-  });
-  const ach = (arr, k) => (arr || []).map(a => `<li class="card ach reveal"><span class="k">${k}</span><b>${esc(a.title)}</b><span class="o">${esc(a.org)}</span>${a.date ? `<span class="o" style="color:var(--em);font-family:var(--f-m)">${esc(a.date)}</span>` : ""}${link(a.url)}</li>`).join("");
-  $("#achList").innerHTML = ach(S.achievements, "Achievement");
-  $("#compList").innerHTML = ach(S.competitions, "Competition"); $("#compList").classList.add("comp");
-
-  /* ---------- profiles ---------- */
-  $("#profGrid").innerHTML = (S.social || []).filter(s => safeUrl(s.url)).map((s, i) => `
-    <a class="card prof reveal" style="--d:${i * .05}s" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(s.name)} profile (opens in new tab)">
-      <span class="logo ${s.icon === "github" ? "" : "txt"}">${s.icon === "github" ? svg("github") : esc(MONO[s.icon] || s.name.slice(0, 2))}</span>
-      <b>${esc(s.name)}</b><span class="h">${esc(s.handle || "")}</span><p>${esc(s.blurb || "")}</p>
-      ${s.icon === "github" ? '<div class="gh-stats" id="ghStats"></div>' : ""}
-      <span class="go">View profile ${svg("arrow")}</span></a>`).join("");
-
-  /* ---------- contact ---------- */
-  const soc = id => (S.social || []).find(s => s.id === id);
-  const ci = (ico, label, val, href, ext) => `<li><a class="c-item" href="${esc(href)}" ${ext ? 'target="_blank" rel="noopener noreferrer"' : ""}><span class="ico">${ico}</span><span><small>${label}</small><span class="v">${esc(val)}</span></span></a></li>`;
-  $("#contactList").innerHTML =
-    (P.email ? ci(svg("mail"), "Email", P.email, mail) : "") +
-    (P.phone ? ci(svg("phone"), "Phone", P.phone, "tel:" + P.phone.replace(/[^+\d]/g, "")) : "") +
-    (soc("linkedin") ? ci(brand("linkedin"), "LinkedIn", soc("linkedin").handle, soc("linkedin").url, true) : "") +
-    (soc("github") ? ci(brand("github"), "GitHub", soc("github").handle, soc("github").url, true) : "");
-
-  /* ---------- GitHub API (optional; fails silently) ---------- */
-  (async () => {
-    const u = P.githubUsername; if (!u) return;
-    const key = "gh:" + u, now = Date.now();
-    try {
-      let d; try { d = JSON.parse(sessionStorage.getItem(key)); } catch (e) {}
-      if (!d || now - d.t > 6e5) {
-        const [a, b] = await Promise.all([fetch(`https://api.github.com/users/${encodeURIComponent(u)}`), fetch(`https://api.github.com/users/${encodeURIComponent(u)}/repos?sort=pushed&per_page=12&type=owner`)]);
-        if (!a.ok || !b.ok) throw new Error("GitHub API " + a.status);
-        d = { t: now, user: await a.json(), repos: await b.json() };
-        try { sessionStorage.setItem(key, JSON.stringify(d)); } catch (e) {}
+    function loop(t) {
+      if (!running) return;
+      const dt = Math.min(50, t - last || 16); last = t;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i]; n.x += (n.vx * dt) / 16; n.y += (n.vy * dt) / 16;
+        if (n.x < -10) n.x = w + 10; else if (n.x > w + 10) n.x = -10;
+        if (n.y < -10) n.y = h + 10; else if (n.y > h + 10) n.y = -10;
       }
-      const st = $("#ghStats");
-      if (st) st.innerHTML = `<span><b>${+d.user.public_repos || 0}</b> repos</span><span><b>${+d.user.followers || 0}</b> followers</span>`;
-      const repos = d.repos.filter(r => !r.fork && r.name.toLowerCase() !== u.toLowerCase() + ".github.io").slice(0, 4);
-      if (repos.length) {
-        $("#repoList").innerHTML = repos.map(r => `<li><a class="card repo" href="${esc(r.html_url)}" target="_blank" rel="noopener noreferrer"><b>${esc(r.name)}</b><p>${esc(r.description || "No description yet.")}</p><span>${esc(r.language || "—")} · updated ${new Date(r.pushed_at).toLocaleDateString("en", { month: "short", year: "numeric" })}</span></a></li>`).join("");
-        $("#repos").hidden = false;
-      }
-    } catch (e) { /* offline or rate-limited: simply hidden */ }
-  })();
-
-  /* ---------- nav, progress, parallax ---------- */
-  const nav = $("#nav"), menu = $("#menuBtn"), links = $("#navLinks"), bar = $("#progress"), hero = $("#home");
-  const setMenu = o => { links.classList.toggle("open", o); menu.setAttribute("aria-expanded", o); menu.setAttribute("aria-label", o ? "Close menu" : "Open menu"); };
-  menu.addEventListener("click", () => setMenu(menu.getAttribute("aria-expanded") !== "true"));
-  $$("a", links).forEach(a => a.addEventListener("click", () => setMenu(false)));
-  addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
-  addEventListener("resize", () => { if (innerWidth > 900) setMenu(false); });
-  const secs = $$("main section[id]"); let tick = false;
-  const onScroll = () => {
-    tick = false;
-    const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
-    nav.classList.toggle("stuck", y > 20);
-    if (!reduce && y < innerHeight * 1.2) hero.style.setProperty("--py", (y * .16).toFixed(1) + "px");
-    let cur = ""; for (const s of secs) if (s.getBoundingClientRect().top <= innerHeight * .35) cur = s.id;
-    $$("a", links).forEach(a => { const on = a.getAttribute("href") === "#" + cur; a.classList.toggle("active", on); on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current"); });
-  };
-  addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  onScroll();
-
-  /* portrait tilt (desktop, motion allowed) */
-  if (finePointer && !reduce) {
-    const fr = $("#frame");
-    hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; fr.style.setProperty("--ry", (x * 5).toFixed(2) + "deg"); fr.style.setProperty("--rx", (-y * 4).toFixed(2) + "deg"); });
-    hero.addEventListener("pointerleave", () => { fr.style.setProperty("--rx", "0deg"); fr.style.setProperty("--ry", "0deg"); });
+      spawn -= dt;
+      if (spawn <= 0 && pairs.length) { const k = Math.floor(Math.random() * (pairs.length / 2)) * 2; packets.push({ a: pairs[k], b: pairs[k + 1], t: 0 }); spawn = o.packetEvery; if (packets.length > 6) packets.shift(); }
+      packets = packets.filter((p) => (p.t += dt / 1300) < 1);
+      draw(); requestAnimationFrame(loop);
+    }
+    function sync() {
+      const want = visible && !document.hidden && !reduceMotion;
+      if (want && !running) { running = true; last = 0; requestAnimationFrame(loop); } else if (!want) running = false;
+    }
+    if ("IntersectionObserver" in window) new IntersectionObserver((en) => { visible = en[0].isIntersecting; sync(); }).observe(canvas);
+    document.addEventListener("visibilitychange", sync);
+    if ("ResizeObserver" in window) new ResizeObserver(size).observe(canvas.parentElement); else window.addEventListener("resize", size);
+    size(); sync();
+    return { setPointer: (p) => { pointer = p; } };
+  }
+  const heroNet = NetBg($("#heroNet"), { max: 70, maxSmall: 34, area: 15000, dist: 150, speed: 0.22, packetEvery: 900 });
+  NetBg($("#contactNet"), { max: 30, maxSmall: 18, area: 14000, dist: 130, speed: 0.15, packetEvery: 1500 });
+  if (heroNet && heroEl && finePointer) {
+    const cv = $("#heroNet");
+    heroEl.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); heroNet.setPointer({ x: e.clientX - r.left, y: e.clientY - r.top }); }, { passive: true });
+    heroEl.addEventListener("pointerleave", () => heroNet.setPointer(null));
   }
 
-  /* custom cursor ring (additive: the native cursor stays) */
-  if (finePointer && !reduce) {
-    const ring = document.createElement("div"), dot = document.createElement("div");
-    ring.className = "cur"; dot.className = "cur-dot"; ring.setAttribute("aria-hidden", "true"); dot.setAttribute("aria-hidden", "true");
-    document.body.append(ring, dot);
-    let tx = 0, ty = 0, rx = 0, ry = 0, run = false;
-    const step = () => { rx += (tx - rx) * .2; ry += (ty - ry) * .2; ring.style.transform = `translate3d(${rx}px,${ry}px,0)`; if (Math.abs(tx - rx) + Math.abs(ty - ry) > .1) requestAnimationFrame(step); else run = false; };
-    addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; dot.style.transform = `translate3d(${tx}px,${ty}px,0)`; ring.classList.add("on"); dot.classList.add("on"); if (!run) { run = true; requestAnimationFrame(step); } });
-    document.addEventListener("pointerover", e => ring.classList.toggle("hot", !!e.target.closest("a,button,.chip,.fm-n")));
-    document.addEventListener("pointerleave", () => { ring.classList.remove("on"); dot.classList.remove("on"); });
-  }
-
-  /* ---------- reveal + count-up (real numbers only) + terminal ---------- */
-  const countUp = el => {
-    const n = +el.dataset.n; if (reduce || !n) return; let t0;
-    const f = t => { t0 = t0 || t; const k = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f);
-  };
-  const rev = $$(".reveal, #term");
-  if ("IntersectionObserver" in window && !reduce) {
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return; const t = e.target; t.classList.add("in"); io.unobserve(t);
-      $$(".count", t).forEach(countUp);
-    }), { threshold: .1, rootMargin: "0px 0px -6% 0px" });
-    rev.forEach((el, i) => { if (el.closest(".hero")) el.style.setProperty("--d", (i % 8) * .09 + "s"); io.observe(el); });
-  } else rev.forEach(el => el.classList.add("in"));
+  /* ---------- GitHub API (optional, fails silently) ---------- */
+  (function () {
+    const user = social.githubUser;
+    if (!user || social.githubApi === false || !window.fetch) return;
+    const KEY = "gh-" + user, TTL = 30 * 60 * 1000;
+    const cached = () => { try { const c = JSON.parse(sessionStorage.getItem(KEY)); if (c && Date.now() - c.t < TTL) return c.d; } catch (e) {} return null; };
+    const store = (d) => { try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d })); } catch (e) {} };
+    const get = (u) => fetch(u, { headers: { Accept: "application/vnd.github+json" } }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+    function render(d) {
+      const card = $("#pf-github .pf-stats");
+      if (card && d.user) card.textContent = d.user.public_repos + " public repos · " + d.user.followers + " followers";
+      const repos = (d.repos || []).filter((r) => !r.fork && /^https:\/\/github\.com\//.test(r.html_url)).slice(0, 4);
+      if (!repos.length) return;
+      set("ghRepos", repos.map((r) => {
+        const upd = r.pushed_at ? new Date(r.pushed_at).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "";
+        return '<li><a href="' + esc(r.html_url) + '" target="_blank" rel="noopener noreferrer"><b>' + esc(r.name) + "</b><p>" + esc(r.description || "No description yet.") + "</p><small>" + esc([r.language, upd && "Updated " + upd].filter(Boolean).join(" · ")) + "</small></a></li>";
+      }).join(""));
+      const box = $("#ghLatest"); if (box) { box.hidden = false; box.classList.add("in"); }
+    }
+    const c = cached(); if (c) return render(c);
+    Promise.all([get("https://api.github.com/users/" + encodeURIComponent(user)), get("https://api.github.com/users/" + encodeURIComponent(user) + "/repos?sort=pushed&per_page=12")])
+      .then((r) => { const d = { user: r[0], repos: r[1] }; store(d); render(d); }).catch(() => {});
+  })();
 })();
