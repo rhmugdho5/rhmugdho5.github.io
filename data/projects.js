@@ -55,7 +55,7 @@ window.PORTFOLIO.projects = [
     image: "assets/projects/sirat.svg",
     imageAlt: "Illustrated application window for Sirat with Salah and Dhikr sections",
     links: {
-      github: "", // <- paste the repository URL here, e.g. "https://github.com/rhmugdho5/Sirat"
+      github: "https://github.com/rhmugdho5/Sirat---Your-Islamic-life-companion", // <- paste the repository URL here, e.g. "https://github.com/rhmugdho5/Sirat"
       demo: "",
     },
     featured: false,

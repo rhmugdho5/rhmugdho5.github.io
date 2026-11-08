@@ -114,7 +114,6 @@ window.PORTFOLIO.profile = {
   /* Areas of interest (from the CV). `primary: true` highlights a tag. */
   interests: [
     { name: "Cybersecurity", primary: true },
-    { name: "Secure Software Development" },
     { name: "Software Engineering" },
     { name: "Linux & System Administration" },
     { name: "Computer Networks" },
