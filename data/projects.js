@@ -72,7 +72,7 @@ window.PORTFOLIO.projects = [
     imageNote: "Illustration — not a screenshot",
     image: "assets/projects/mysphere.svg",
     imageAlt: "Illustrated dashboard for MySphere with charts",
-    links: { github: "", demo: "" },
+    links: { github: "https://github.com/rhmugdho5/MySphere", demo: "" },
     featured: false,
   },
   {
@@ -87,7 +87,7 @@ window.PORTFOLIO.projects = [
     imageNote: "Illustration — not a screenshot",
     image: "assets/projects/pact.svg",
     imageAlt: "Illustrated management console for PACT with users, programs, tasks and deadlines",
-    links: { github: "", demo: "" },
+    links: { github: "https://github.com/rhmugdho5/P.A.C.T", demo: "" },
     featured: false,
   },
   {
@@ -102,7 +102,7 @@ window.PORTFOLIO.projects = [
     imageNote: "Illustration — not a screenshot",
     image: "assets/projects/space-invaders.svg",
     imageAlt: "Retro CRT illustration of the Space Invaders ASCII console game",
-    links: { github: "", demo: "" },
+    links: { github: "https://github.com/rhmugdho5/Space-Invaders", demo: "" },
     featured: false,
   },
 ];
