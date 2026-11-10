@@ -67,8 +67,7 @@ window.PORTFOLIO.profile = {
 
   /* ---------- Contact ---------- */
   email: "rhmugdho5@gmail.com",
-  //phone: "+880 1930361178",          // shown as written
-  //phoneLink: "+8801930361178",       // used for tel: link (no spaces)
+
   /* Subject line pre-filled when someone clicks "Email me". */
   emailSubject: "Hello Rejoan — reaching out from your portfolio",
 
