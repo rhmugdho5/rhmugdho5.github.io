@@ -31,6 +31,14 @@ window.PORTFOLIO = window.PORTFOLIO || {};
 
 window.PORTFOLIO.achievements = [
   {
+    type: "participation",
+    title: "NASA’s International Observe the Moon Night 2026",
+    issuer: "NASA",
+    date: "September 2026",
+    note: "",
+    url: "https://drive.google.com/file/d/130li8OIjlZHV9SamVa9aXmoS9JjhFyrO/view?usp=sharing",
+  },
+  {
     type: "recognition",
     title: "NASA Artemis II Boarding Pass",
     issuer: "NASA",

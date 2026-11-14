@@ -39,6 +39,20 @@ window.PORTFOLIO.certifications = [
     featured: true,
   },
   {
+    title: "Threat Intelligence: Connecting the Dots in Cybersecurity",
+    issuer: "Cyberwarfare Labs",
+    date: "October 2026",
+    category: "Cybersecurity",
+    url: "https://drive.google.com/file/d/1m7iXbwKsbaoBHdT6RTQD3zlOfSP2P6_3/view?usp=sharing",
+  },
+  {
+    title: "Inside the APT Playbook: Malware Analysis and Threat Actor Profiling for Modern Threat Intelligence.",
+    issuer: "Cyberwarfare Labs",
+    date: "September 2026",
+    category: "Cybersecurity",
+    url: "https://drive.google.com/file/d/1qogl-e_IAu_W7a2dkoXm6XApLjhkffWq/view?usp=sharing",
+  },
+  {
     title: "Automating Passive Web Application Recon with n8n & AI",
     issuer: "Cyberwarfare Labs",
     date: "July 2026",
