@@ -31,7 +31,7 @@ window.PORTFOLIO = window.PORTFOLIO || {};
 
 window.PORTFOLIO.achievements = [
   {
-    type: "participation",
+    type: "recognition",
     title: "NASA’s International Observe the Moon Night 2026",
     issuer: "NASA",
     date: "September 2026",
