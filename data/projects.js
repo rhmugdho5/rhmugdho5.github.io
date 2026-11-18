@@ -43,6 +43,24 @@ window.PORTFOLIO = window.PORTFOLIO || {};
 
 window.PORTFOLIO.projects = [
   {
+    title: "Joruri BD",
+    subtitle: "Emergency Assistance App",
+    category: "Mobile Application",
+    description:
+      "Bangladesh-focused emergency assistance app with offline access to emergency contacts, hospitals, pharmacies, blood donors and safety guides.",
+    features: ["Hospitals", "Pharmacies", "Blood Donors", "Emergency Contacts"],
+    tech: ["Dart", "HTML", "JavaScript", "PowerShell", "Shell", "Kotlin"],
+    accent: "#00E6AD",
+    imageNote: "Illustration — not a screenshot",
+    image: "assets/projects/Joruri-BD.png",
+    imageAlt: "Illustrated application window for emergency sections",
+    links: {
+      github: "https://github.com/rhmugdho5/joruri-bd", // <- paste the repository URL here, e.g. "https://github.com/rhmugdho5/Sirat"
+      demo: "",
+    },
+    featured: false,
+  },
+  {
     title: "Sirat",
     subtitle: "Your Islamic Life Companion",
     category: "Desktop Application",
